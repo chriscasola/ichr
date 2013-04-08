@@ -11,6 +11,7 @@ package ichr;
 
 import ichr.database.DataStore;
 import ichr.view.login.LoginView;
+import ichr.view.main.MainView;
 
 import java.sql.SQLException;
 
@@ -54,4 +55,14 @@ public class ICHRSampleManager {
 		});
 	}
 
+	public static void showMainWindow() {
+		// Start the GUI
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				final MainView mainView = new MainView();
+				mainView.setVisible(true);
+			}
+		});
+	}
 }

@@ -9,8 +9,11 @@
  ******************************************************************************/
 package ichr.database;
 
+import ichr.ICHRException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -99,20 +102,39 @@ public class DataStore {
 			return connection;
 	}
 	
+	public PreparedStatement getPreparedStatement(String query) throws ICHRException {
+		final PreparedStatement s;
+		try {
+			s = connection.prepareStatement(query);
+		} catch (SQLException e) {
+			throw new ICHRException("Could not create statement.", e);
+		}
+		return s;
+	}
+	
+	public void closeStatement(Statement s) {
+		try {
+			s.close();
+		} catch (SQLException e) {
+			System.err.println("Error closing statmenet!");
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Creates the application's tables if they do not already exist
 	 */
 	public void createTables() {
-		Statement stmt = null;
+		Statement s = null;
 		try {
-			stmt = connection.createStatement();
-			stmt.addBatch("CREATE TABLE IF NOT EXISTS users (" +
+			s = connection.createStatement();
+			s.addBatch("CREATE TABLE IF NOT EXISTS users (" +
 					"username VARCHAR(" + USER_NAME_LEN + ")," +
 					"password VARCHAR(" + PASSWORD_LEN + ")," +
 					"PRIMARY KEY (username)" +
 					")");
-			stmt.addBatch("INSERT INTO users VALUES ('admin', 'password')");
-			stmt.executeBatch();
+			s.addBatch("INSERT INTO users VALUES ('admin', 'password')");
+			s.executeBatch();
 			connection.commit();
 		}
 		catch (SQLException e) {
@@ -125,13 +147,8 @@ public class DataStore {
 			}
 		}
 		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					System.err.println("Could not close statement!");
-					e.printStackTrace();
-				}
+			if (s != null) {
+				closeStatement(s);
 			}
 		}
 	}

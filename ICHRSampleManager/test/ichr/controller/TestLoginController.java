@@ -1,5 +1,7 @@
 package ichr.controller;
 
+import static org.junit.Assert.*;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -51,6 +53,31 @@ public class TestLoginController {
 	@Test(expected=ICHRException.class)
 	public void checkPasswordWithInvalidUsername() throws ICHRException {
 		controller.checkPassword("bla", "bla");
+	}
+	
+	@Test
+	public void loginFormWorksWithCorrectPassword() throws ICHRException {
+		view.getLoginPanel().getUserNameField().setText("testuser");
+		view.getLoginPanel().getPasswordField().setText("testpassword");
+		controller.checkCredentials();
+	}
+	
+	@Test(expected=ICHRException.class)
+	public void loginFormWorksWithIncorrectPassword() throws ICHRException {
+		view.getLoginPanel().getUserNameField().setText("testuser");
+		view.getLoginPanel().getPasswordField().setText("testpswd");
+		controller.checkCredentials();
+	}
+	
+	@Test
+	public void loginFormHandlesBlankFields() {
+		try {
+			controller.checkCredentials();
+			fail("Check credentials should throw an exception when username/password are blank.");
+		}
+		catch (ICHRException e) {
+			assertEquals("Login Failed: Incorrect password", e.getMessage());
+		}
 	}
 
 	private static void addTestData() {
