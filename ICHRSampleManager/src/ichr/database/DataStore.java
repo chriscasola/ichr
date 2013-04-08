@@ -11,11 +11,17 @@ package ichr.database;
 
 import ichr.ICHRException;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Singleton class to provide access to the database
@@ -125,32 +131,66 @@ public class DataStore {
 	 * Creates the application's tables if they do not already exist
 	 */
 	public void createTables() {
+		executeSQLFile("./sql/drop.sql");
+		executeSQLFile("./sql/create.sql");
+		executeSQLFile("./sql/insert.sql");
+	}
+	
+	private void executeSQLFile(String filePath) {
 		Statement s = null;
 		try {
+			List<String> statements = readSQLFile(filePath);
 			s = connection.createStatement();
-			s.addBatch("CREATE TABLE IF NOT EXISTS users (" +
-					"username VARCHAR(" + USER_NAME_LEN + ")," +
-					"password VARCHAR(" + PASSWORD_LEN + ")," +
-					"PRIMARY KEY (username)" +
-					")");
-			s.addBatch("INSERT INTO users VALUES ('admin', 'password')");
+			for (String statement : statements) {
+				s.addBatch(statement);
+			}
 			s.executeBatch();
 			connection.commit();
 		}
+		catch (ICHRException e) {
+			System.err.println("Unable to execute SQL file: " + filePath);
+		}
 		catch (SQLException e) {
-			try {
-				System.err.println("Rolling back transaction: " + e.getMessage());
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.err.println("Error occurred rolling back transaction.");
-				e1.printStackTrace();
-			}
+			System.err.println("Database error occurred while trying to execute SQL file: " + filePath + "\n\t" + e.getMessage());
 		}
 		finally {
 			if (s != null) {
 				closeStatement(s);
 			}
 		}
+	}
+	
+	private List<String> readSQLFile(String filePath) throws ICHRException {
+		BufferedReader sqlFile = null;
+		List<String> statements = new ArrayList<String>();
+		String currStatement= "";
+		
+		try {
+			sqlFile = new BufferedReader(new FileReader(filePath));
+			int c;
+			while ((c = sqlFile.read()) != -1) {
+				if (c == (int)';') {
+					statements.add(currStatement);
+					currStatement = "";
+				}
+				else {
+					currStatement += (char)c;
+				}
+			}
+		}
+		catch (FileNotFoundException e) {
+			throw new ICHRException("Could not open SQL file", e);
+		}
+		catch (IOException e) {
+			throw new ICHRException("Error reading SQL file", e);
+		}
+		finally {
+			if (sqlFile != null) {
+				try {sqlFile.close();} catch (IOException e) {throw new ICHRException("Could not close SQL file", e);}
+			}
+		}
+		
+		return statements;
 	}
 	
 	/**

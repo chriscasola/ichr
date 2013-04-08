@@ -84,7 +84,6 @@ public class TestLoginController {
 		Statement stmt = null;
 		try {
 			stmt = DataStore.getDB().getConnection().createStatement();
-			stmt.addBatch("DELETE FROM users");
 			stmt.addBatch("INSERT INTO users VALUES ('testuser', 'testpassword')");
 			stmt.executeBatch();
 			DataStore.getDB().getConnection().commit();
