@@ -44,6 +44,9 @@ public class LoginView extends JFrame {
 		// Add controller to login button
 		loginPanel.getLoginButton().addActionListener(new LoginController(this));
 		
+		// Make the login button the default button for the enter key
+		this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
+		
 		// Clean up when the close button is clicked.
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowAdapter() {

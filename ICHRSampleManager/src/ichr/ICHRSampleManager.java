@@ -27,6 +27,8 @@ import javax.swing.SwingUtilities;
 public class ICHRSampleManager {
 
 	public static final String applicationName = "ICHR Sample Manager";
+	
+	private static String username = null;
 
 	/**
 	 * @param args
@@ -60,9 +62,17 @@ public class ICHRSampleManager {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				final MainView mainView = new MainView();
+				final MainView mainView = new MainView(applicationName);
 				mainView.setVisible(true);
 			}
 		});
+	}
+	
+	public static void setUsername(String username) {
+		ICHRSampleManager.username = username;
+	}
+	
+	public static String getUsername() {
+		return ICHRSampleManager.username;
 	}
 }

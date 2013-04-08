@@ -128,7 +128,7 @@ public class DataStore {
 	}
 	
 	/**
-	 * Creates the application's tables if they do not already exist
+	 * Recreate the application's tables (REMOVES ALL DATA)
 	 */
 	public void createTables() {
 		executeSQLFile("./sql/drop.sql");

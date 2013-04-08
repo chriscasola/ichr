@@ -44,19 +44,19 @@ public class LoginController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		// Check the credentials
 		try {
+			// Check the credentials
 			checkCredentials();
+			
+			// Show the main application window
+			ICHRSampleManager.showMainWindow();
+			
+			// Close the login window
+			view.dispose();
 		}
 		catch (ICHRException e) {
 			JOptionPane.showMessageDialog(view, "Invalid login information!", "Invalid Login", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		// Show the main application window
-		ICHRSampleManager.showMainWindow();
-		
-		// Close the login window
-		view.dispose();
 	}
 	
 	protected void checkCredentials() throws ICHRException {
@@ -67,6 +67,9 @@ public class LoginController implements ActionListener {
 		
 		// Check the password
 		checkPassword(username, password);
+		
+		// Store username
+		ICHRSampleManager.setUsername(username);
 		
 		// Clear password from memory
 		for (int i = 0; i < charPassword.length; i++) {
