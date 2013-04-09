@@ -9,13 +9,14 @@
  ******************************************************************************/
 package ichr.view.main.listeners;
 
-import ichr.controller.CheckOutController;
-import ichr.view.main.CheckOutPanel;
+import ichr.controller.BrowseSamplesController;
+import ichr.view.main.BrowseSamplesPanel;
 import ichr.view.main.ModalDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -24,15 +25,15 @@ import javax.swing.SwingUtilities;
  * @version Apr 8, 2013
  *
  */
-public class ShowCheckOutListener implements ActionListener {
-	
-	private CheckOutPanel checkOutPanel;
-	
-	private ModalDialog dialogWindow;
+public class ShowBrowseSamplesListener implements ActionListener {
 	
 	private final JFrame parentWindow;
 	
-	public ShowCheckOutListener(JFrame parentWindow) {
+	private BrowseSamplesPanel browsePanel;
+	
+	private JDialog dialogWindow;
+	
+	public ShowBrowseSamplesListener(JFrame parentWindow) {
 		this.parentWindow = parentWindow;
 	}
 
@@ -40,21 +41,20 @@ public class ShowCheckOutListener implements ActionListener {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent arg0) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				checkOutPanel = new CheckOutPanel();
-				dialogWindow = new ModalDialog(parentWindow, checkOutPanel);
-				dialogWindow.getRootPane().setDefaultButton(checkOutPanel.getCheckOutButton());
-				checkOutPanel.getCheckOutButton().addActionListener(new CheckOutController(dialogWindow, checkOutPanel));
-				checkOutPanel.getCancelButton().addActionListener(new ActionListener() {
+				browsePanel = new BrowseSamplesPanel();
+				dialogWindow = new ModalDialog(parentWindow, browsePanel);
+				browsePanel.getRefreshButton().addActionListener(new BrowseSamplesController(browsePanel));
+				/*checkInPanel.getCancelButton().addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						dialogWindow.setVisible(false);
 						dialogWindow.dispose();
 					}
-				});
+				});*/
 				dialogWindow.setVisible(true);
 			}
 		});

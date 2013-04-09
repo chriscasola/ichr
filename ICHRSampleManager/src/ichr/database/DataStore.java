@@ -80,7 +80,7 @@ public class DataStore {
 		System.out.println("Opening database connection.");
 		if (connection == null) {
 			connection = DriverManager.getConnection("jdbc:mysql://" + MYSQL_SERVER + "/" + 
-					PROD_DB + "?" + "user=" + PROD_USER + "&password=" + PROD_PWD);
+					PROD_DB + "?" + "user=" + PROD_USER + "&password=" + PROD_PWD + "&zeroDateTimeBehavior=convertToNull");
 		}
 		connection.setAutoCommit(false);
 	}
@@ -94,6 +94,7 @@ public class DataStore {
 		if (connection != null) {
 			try {
 				connection.close();
+				connection = null;
 			} catch (SQLException e) {
 				System.err.println("Error occurred closing database.");
 				e.printStackTrace();
@@ -136,7 +137,7 @@ public class DataStore {
 		executeSQLFile("./sql/insert.sql");
 	}
 	
-	private void executeSQLFile(String filePath) {
+	public void executeSQLFile(String filePath) {
 		Statement s = null;
 		try {
 			List<String> statements = readSQLFile(filePath);
@@ -144,7 +145,12 @@ public class DataStore {
 			for (String statement : statements) {
 				s.addBatch(statement);
 			}
-			s.executeBatch();
+			final int[] results = s.executeBatch();
+			for (int i = 0; i < results.length; i++) {
+				if (results[i] == Statement.EXECUTE_FAILED) {
+					throw new ICHRException("error in sql file");
+				}
+			}
 			connection.commit();
 		}
 		catch (ICHRException e) {
@@ -202,7 +208,7 @@ public class DataStore {
 		System.out.println("Opening database connection.");
 		if (connection == null) {
 			connection = DriverManager.getConnection("jdbc:mysql://" + MYSQL_SERVER + "/" + 
-					TEST_DB + "?" + "user=" + TEST_USER + "&password=" + TEST_PWD);
+					TEST_DB + "?" + "user=" + TEST_USER + "&password=" + TEST_PWD + "&zeroDateTimeBehavior=convertToNull");
 		}
 		connection.setAutoCommit(false);
 	}

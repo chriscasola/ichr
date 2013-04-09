@@ -10,8 +10,7 @@
 package ichr.view.main;
 
 import ichr.database.DataStore;
-import ichr.view.main.listeners.ShowCheckInListener;
-import ichr.view.main.listeners.ShowCheckOutListener;
+import ichr.view.main.listeners.*;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -45,6 +44,7 @@ public class MainView extends JFrame {
 		// Add action listeners
 		mainPanel.getCheckOutButton().addActionListener(new ShowCheckOutListener(this));
 		mainPanel.getCheckInButton().addActionListener(new ShowCheckInListener(this));
+		mainPanel.getBrowseSamplesButton().addActionListener(new ShowBrowseSamplesListener(this));
 		
 		// Clean up when the close button is clicked.
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

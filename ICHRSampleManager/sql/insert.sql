@@ -3,7 +3,8 @@ INSERT INTO users (username, password) VALUES
 	('chris', 'password'),
 	('steve', 'password'),
 	('silvia', 'password'),
-	('donni', 'password');
+	('donni', 'password'),
+	('testuser', 'testpassword');
 
 INSERT INTO projects (prj_id, prj_name, prj_desc) VALUES
 	(1, 'Project A', 'Description of project A'),
@@ -16,6 +17,16 @@ INSERT INTO proj_assignments (username, prj_id) VALUES
 	('steve', 4),
 	('silvia', 4),
 	('donni', 1);
+
+INSERT INTO boxes (box_barcode) VALUES
+	('box1'),
+	('box2'),
+	('box3');
+
+INSERT INTO samples (sample_barcode, sample_name, box_barcode) VALUES
+	('sample1', 'Sample A', 'box1'),
+	('sample2', 'Sample B', 'box3'),
+	('sample3', 'Sample C', 'box2');
 
 INSERT INTO freezers (f_descr) VALUES
 	('Freezer 1'),

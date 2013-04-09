@@ -22,20 +22,22 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class MainPanel extends JPanel {
 	
-	private final JButton btnCheckOut, btnCheckIn;
+	private final JButton btnCheckOut, btnCheckIn, btnBrowseSamples;
 
 	public MainPanel() {
 		
 		// Construct the buttons
 		btnCheckOut = new JButton("Check Out a Sample");
 		btnCheckIn = new JButton("Check In a Sample");
+		btnBrowseSamples = new JButton("Browse Samples");
 		
 		// Set Layout Manager
-		setLayout(new GridLayout(3,3));
+		setLayout(new GridLayout(0,3));
 		
 		// Add buttons
 		add(btnCheckOut);
 		add(btnCheckIn);
+		add(btnBrowseSamples);
 	}
 	
 	public JButton getCheckInButton() {
@@ -44,5 +46,9 @@ public class MainPanel extends JPanel {
 	
 	public JButton getCheckOutButton() {
 		return btnCheckOut;
+	}
+	
+	public JButton getBrowseSamplesButton() {
+		return btnBrowseSamples;
 	}
 }

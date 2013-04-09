@@ -3,7 +3,6 @@ package ichr.controller;
 import static org.junit.Assert.*;
 
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import ichr.ICHRException;
 import ichr.database.DataStore;
@@ -37,6 +36,7 @@ public class TestLoginController {
 	
 	@AfterClass
 	public static void tearDown() {
+		DataStore.getDB().executeSQLFile("./sql/drop.sql");
 		DataStore.getDB().closeConnection();
 	}
 
@@ -81,31 +81,6 @@ public class TestLoginController {
 	}
 
 	private static void addTestData() {
-		Statement stmt = null;
-		try {
-			stmt = DataStore.getDB().getConnection().createStatement();
-			stmt.addBatch("INSERT INTO users VALUES ('testuser', 'testpassword')");
-			stmt.executeBatch();
-			DataStore.getDB().getConnection().commit();
-		}
-		catch (SQLException e) {
-			try {
-				System.err.println("Rolling back transaction");
-				DataStore.getDB().getConnection().rollback();
-			} catch (SQLException e1) {
-				System.err.println("Error occurred rolling back transaction.");
-				e1.printStackTrace();
-			}
-		}
-		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					System.err.println("Could not close statement!");
-					e.printStackTrace();
-				}
-			}
-		}
+		DataStore.getDB().executeSQLFile("./sql/test_data.sql");
 	}
 }

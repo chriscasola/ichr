@@ -44,12 +44,16 @@ public class CheckOutPanel extends JPanel {
 		add(btnCancel);
 	}
 
-	public JButton getCheckInButton() {
+	public JButton getCheckOutButton() {
 		return btnCheckOut;
 	}
 
 	public AbstractButton getCancelButton() {
 		return btnCancel;
+	}
+	
+	public JTextField getSampleNumField() {
+		return txtSampleNum;
 	}
 }
 
