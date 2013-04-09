@@ -9,6 +9,7 @@
  ******************************************************************************/
 package ichr.view.main.listeners;
 
+import ichr.controller.CheckInController;
 import ichr.view.main.CheckInPanel;
 import ichr.view.main.ModalDialog;
 
@@ -46,6 +47,7 @@ public class ShowCheckInListener implements ActionListener {
 				checkInPanel = new CheckInPanel();
 				dialogWindow = new ModalDialog(parentWindow, checkInPanel);
 				dialogWindow.getRootPane().setDefaultButton(checkInPanel.getCheckInButton());
+				checkInPanel.getCheckInButton().addActionListener(new CheckInController(dialogWindow, checkInPanel));
 				checkInPanel.getCancelButton().addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent arg0) {

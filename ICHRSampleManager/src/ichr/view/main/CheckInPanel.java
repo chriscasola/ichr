@@ -51,4 +51,8 @@ public class CheckInPanel extends JPanel {
 	public AbstractButton getCancelButton() {
 		return btnCancel;
 	}
+	
+	public JTextField getSampleNumField() {
+		return txtSampleNum;
+	}
 }
