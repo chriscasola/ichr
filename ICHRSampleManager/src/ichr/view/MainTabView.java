@@ -12,16 +12,18 @@ package ichr.view;
 import ichr.database.DataStore;
 import ichr.view.listeners.TabButtonListener;
 
+import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.SpringLayout;
 
 /**
  * @author Chris Casola
@@ -33,6 +35,7 @@ public class MainTabView extends JFrame {
 	
 	protected final TabButtonPanel tabButtonPanel;
 	protected final MainTabPanel mainTabPanel;
+	protected final JPanel headerPanel;
 	
 	protected static final int WINDOW_WIDTH = 800;
 	protected static final int WINDOW_HEIGHT = 600;
@@ -42,23 +45,51 @@ public class MainTabView extends JFrame {
 		
 		// Construct the content panel
 		JPanel content = new JPanel();
-		content.setLayout(new GridLayout(0,1));
+		SpringLayout layout = new SpringLayout();
+		content.setLayout(layout);
+
+		headerPanel = new JPanel();
+		final JLabel lblHeader = new JLabel("ICHR Sample Management System");
+		lblHeader.setFont(lblHeader.getFont().deriveFont(18f));
+		headerPanel.add(lblHeader);
+		headerPanel.setBackground(new Color(111,173,43));
+		headerPanel.setBorder(null);
 		
-		// Add header section
-		content.add(new JLabel("ICHR"));
-		
-		// Add button panel
 		tabButtonPanel = new TabButtonPanel();
-		content.add(tabButtonPanel);
+		tabButtonPanel.setBackground(new Color(179,243,109));
+		tabButtonPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.black));
+		tabButtonPanel.validate();
 		
-		// Add the main tab panel
 		mainTabPanel = new MainTabPanel();
+		
+		// Setup constraints
+		layout.putConstraint(SpringLayout.NORTH, headerPanel, 0, SpringLayout.NORTH, content);
+		layout.putConstraint(SpringLayout.WEST, headerPanel, 0, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, headerPanel, 0, SpringLayout.EAST, content);
+		layout.putConstraint(SpringLayout.SOUTH, headerPanel, 50, SpringLayout.NORTH, headerPanel);
+		
+		layout.putConstraint(SpringLayout.NORTH, tabButtonPanel, 0, SpringLayout.SOUTH, headerPanel);
+		layout.putConstraint(SpringLayout.WEST, tabButtonPanel, 0, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, content, 0, SpringLayout.EAST, tabButtonPanel);
+		layout.putConstraint(SpringLayout.SOUTH, tabButtonPanel, 40, SpringLayout.NORTH, tabButtonPanel);
+		
+		layout.putConstraint(SpringLayout.NORTH, mainTabPanel, 5, SpringLayout.SOUTH, tabButtonPanel);
+		layout.putConstraint(SpringLayout.WEST, mainTabPanel, 5, SpringLayout.WEST, content);
+		layout.putConstraint(SpringLayout.EAST, mainTabPanel, -5, SpringLayout.EAST, content);
+		
+		layout.putConstraint(SpringLayout.SOUTH, content, 5, SpringLayout.SOUTH, mainTabPanel);
+		
+		// Add components
+		content.add(headerPanel);
+		content.add(tabButtonPanel);
 		content.add(mainTabPanel);
 		
 		// Setup listeners for the tab panel
 		setupTabPanelListeners();
 		
 		// Add the content panel to the frame
+		content.setPreferredSize(new Dimension(content.getPreferredSize().width, WINDOW_HEIGHT));
+		content.validate();
 		setContentPane(content);
 
 		// Clean up when the close button is clicked.

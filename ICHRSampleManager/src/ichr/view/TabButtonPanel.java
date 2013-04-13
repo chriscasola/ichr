@@ -9,9 +9,7 @@
  ******************************************************************************/
 package ichr.view;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +32,7 @@ public class TabButtonPanel extends JPanel {
 	public TabButtonPanel() {
 		buttons = new ArrayList<JToggleButton>();
 		buttonGroup = new ButtonGroup();
-		setLayout(new FlowLayout());
+		setLayout(new GridLayout(1,0));
 		constructButtons();
 		addButtonsToPanel();
 	}
