@@ -70,7 +70,7 @@ public class ICHRSampleManager {
 				final MainTabView mainView = new MainTabView(applicationName);
 				mainView.pack();
 				mainView.setVisible(true);
-				
+				mainView.setMinimumSize(mainView.getSize());
 				//final MainView mainView = new MainView(applicationName);
 				//mainView.setVisible(true);
 			}

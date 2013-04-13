@@ -11,6 +11,7 @@ package ichr.view;
 
 import ichr.view.panels.CheckInPanel;
 import ichr.view.panels.CheckOutPanel;
+import ichr.view.panels.SearchPanel;
 
 import java.awt.CardLayout;
 
@@ -35,6 +36,7 @@ public class MainTabPanel extends JPanel {
 		// Add panels
 		add(new CheckOutPanel(), "Check Out");
 		add(new CheckInPanel(), "Check In");
+		add(new SearchPanel(), "Search");
 	}
 	
 	public CardLayout getLayout() {

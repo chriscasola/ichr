@@ -9,6 +9,8 @@
  ******************************************************************************/
 package ichr.view;
 
+import static javax.swing.SpringLayout.*;
+
 import ichr.database.DataStore;
 import ichr.view.listeners.TabButtonListener;
 
@@ -63,21 +65,21 @@ public class MainTabView extends JFrame {
 		mainTabPanel = new MainTabPanel();
 		
 		// Setup constraints
-		layout.putConstraint(SpringLayout.NORTH, headerPanel, 0, SpringLayout.NORTH, content);
-		layout.putConstraint(SpringLayout.WEST, headerPanel, 0, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, headerPanel, 0, SpringLayout.EAST, content);
-		layout.putConstraint(SpringLayout.SOUTH, headerPanel, 50, SpringLayout.NORTH, headerPanel);
+		layout.putConstraint(NORTH, headerPanel, 0, NORTH, content);
+		layout.putConstraint(WEST, headerPanel, 0, WEST, content);
+		layout.putConstraint(EAST, headerPanel, 0, EAST, content);
+		layout.putConstraint(SOUTH, headerPanel, 50, NORTH, headerPanel);
 		
-		layout.putConstraint(SpringLayout.NORTH, tabButtonPanel, 0, SpringLayout.SOUTH, headerPanel);
-		layout.putConstraint(SpringLayout.WEST, tabButtonPanel, 0, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, content, 0, SpringLayout.EAST, tabButtonPanel);
-		layout.putConstraint(SpringLayout.SOUTH, tabButtonPanel, 40, SpringLayout.NORTH, tabButtonPanel);
+		layout.putConstraint(NORTH, tabButtonPanel, 0, SOUTH, headerPanel);
+		layout.putConstraint(WEST, tabButtonPanel, 0, WEST, content);
+		layout.putConstraint(EAST, content, 0, EAST, tabButtonPanel);
+		layout.putConstraint(SOUTH, tabButtonPanel, 40, NORTH, tabButtonPanel);
 		
-		layout.putConstraint(SpringLayout.NORTH, mainTabPanel, 5, SpringLayout.SOUTH, tabButtonPanel);
-		layout.putConstraint(SpringLayout.WEST, mainTabPanel, 5, SpringLayout.WEST, content);
-		layout.putConstraint(SpringLayout.EAST, mainTabPanel, -5, SpringLayout.EAST, content);
+		layout.putConstraint(NORTH, mainTabPanel, 5, SOUTH, tabButtonPanel);
+		layout.putConstraint(WEST, mainTabPanel, 5, WEST, content);
+		layout.putConstraint(EAST, mainTabPanel, -5, EAST, content);
 		
-		layout.putConstraint(SpringLayout.SOUTH, content, 5, SpringLayout.SOUTH, mainTabPanel);
+		layout.putConstraint(SOUTH, content, 5, SOUTH, mainTabPanel);
 		
 		// Add components
 		content.add(headerPanel);

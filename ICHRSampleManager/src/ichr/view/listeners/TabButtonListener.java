@@ -41,12 +41,7 @@ public class TabButtonListener implements ActionListener {
 		final JToggleButton source = (JToggleButton) e.getSource();
 		final String name = source.getText();
 
-		if (name.equals("Check Out")) {
-			tabPanel.getLayout().show(tabPanel, "Check Out");
-		}
-		else if (name.equals("Check In")) {
-			tabPanel.getLayout().show(tabPanel, "Check In");
-		}
+		tabPanel.getLayout().show(tabPanel, name);
 	}
 
 }
