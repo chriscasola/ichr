@@ -9,6 +9,8 @@
  ******************************************************************************/
 package ichr.view.panels;
 
+import static ichr.view.MainTabView.*;
+
 import static javax.swing.SpringLayout.*;
 
 import javax.swing.JButton;
@@ -47,10 +49,6 @@ public class CheckOutPanel extends JPanel {
 	protected JButton btnCheckOut;
 	protected JButton btnCancel;
 	
-	public static final int LABEL_WIDTH = 200;
-	public static final int SECTION_SPACING = 35;
-	public static final int VERTICAL_SPACING = 10;
-
 	public CheckOutPanel() {
 		layout = new SpringLayout();
 		setLayout(layout);

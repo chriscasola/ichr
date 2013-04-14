@@ -12,7 +12,9 @@ package ichr.view;
 import ichr.view.panels.CheckInPanel;
 import ichr.view.panels.CheckOutPanel;
 import ichr.view.panels.ReceiveSamplesPanel;
+import ichr.view.panels.ReportsPanel;
 import ichr.view.panels.SearchPanel;
+import ichr.view.panels.UsersPanel;
 
 import java.awt.CardLayout;
 
@@ -39,6 +41,8 @@ public class MainTabPanel extends JPanel {
 		add(new CheckInPanel(), "Check In");
 		add(new SearchPanel(), "Search");
 		add(new ReceiveSamplesPanel(), "Receive Samples");
+		add(new ReportsPanel(), "Reports");
+		add(new UsersPanel(), "Users");
 	}
 	
 	public CardLayout getLayout() {

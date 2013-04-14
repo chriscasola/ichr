@@ -39,6 +39,10 @@ public class MainTabView extends JFrame {
 	protected final MainTabPanel mainTabPanel;
 	protected final JPanel headerPanel;
 	
+	public static final int LABEL_WIDTH = 200;
+	public static final int SECTION_SPACING = 35;
+	public static final int VERTICAL_SPACING = 10;
+	
 	protected static final int WINDOW_WIDTH = 800;
 	protected static final int WINDOW_HEIGHT = 600;
 

@@ -9,6 +9,8 @@
  ******************************************************************************/
 package ichr.view.panels;
 
+import static ichr.view.MainTabView.*;
+
 import static javax.swing.SpringLayout.*;
 
 import javax.swing.ButtonGroup;
@@ -53,11 +55,6 @@ public class CheckInPanel extends JPanel {
 	protected JButton btnCheckIn;
 	protected JButton btnCancel;
 	
-	
-	public static final int LABEL_WIDTH = 200;
-	public static final int SECTION_SPACING = 35;
-	public static final int VERTICAL_SPACING = 10;
-
 	public CheckInPanel() {
 		layout = new SpringLayout();
 		setLayout(layout);

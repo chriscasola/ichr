@@ -9,6 +9,8 @@
  ******************************************************************************/
 package ichr.view.panels;
 
+import static ichr.view.MainTabView.*;
+
 import static javax.swing.SpringLayout.*;
 
 import java.awt.GridLayout;
@@ -46,10 +48,6 @@ public class SearchPanel extends JPanel {
 	protected JButton btnSearch;
 	protected JTable sampleTable;
 	protected JScrollPane sampleTableScroll;
-	
-	public static final int LABEL_WIDTH = 200;
-	public static final int SECTION_SPACING = 35;
-	public static final int VERTICAL_SPACING = 10;
 
 	public SearchPanel() {
 		layout =  new SpringLayout();
