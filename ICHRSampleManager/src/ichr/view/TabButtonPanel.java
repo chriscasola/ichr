@@ -49,7 +49,7 @@ public class TabButtonPanel extends JPanel {
 		buttons.add(new JToggleButton("Check Out", true));
 		buttons.add(new JToggleButton("Check In"));
 		buttons.add(new JToggleButton("Search"));
-		buttons.add(new JToggleButton("Receive Sample"));
+		buttons.add(new JToggleButton("Receive Samples"));
 		buttons.add(new JToggleButton("Reports"));
 		buttons.add(new JToggleButton("Users"));
 		buttons.add(new JToggleButton("Help"));
