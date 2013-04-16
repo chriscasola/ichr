@@ -9,17 +9,16 @@
  ******************************************************************************/
 package ichr.view.panels;
 
-import static ichr.view.MainView.*;
+import static ichr.view.main.MainView.*;
 
 import static javax.swing.SpringLayout.*;
 
 import ichr.controller.GetSampleTypesController;
 import ichr.controller.GetSupplierController;
 import ichr.model.SampleTypesModel;
-import ichr.view.ManageSampleTypesDialog;
-import ichr.view.main.ModalDialog;
+import ichr.view.dialogs.ManageSampleTypesDialog;
+import ichr.view.dialogs.ModalDialog;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

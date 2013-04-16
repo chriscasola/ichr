@@ -11,7 +11,7 @@ package ichr.controller;
 
 import ichr.ICHRException;
 import ichr.database.DataStore;
-import ichr.view.ManageSampleTypesDialog;
+import ichr.view.dialogs.ManageSampleTypesDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -54,7 +54,7 @@ public class RemoveSampleTypeController implements ActionListener {
 				DataStore.getDB().closeStatement(s);
 			}
 			catch (SQLException e) {
-				JOptionPane.showMessageDialog(view, "You cannot remove a sample type that is currently assigned to samples.", "Cannot Remove Sample Type", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(view, "You cannot remove a sample type that is currently assigned to a sample.", "Cannot Remove Sample Type", JOptionPane.INFORMATION_MESSAGE);
 			}
 			catch (ICHRException e) {
 				System.err.println("Error removing sample type!");

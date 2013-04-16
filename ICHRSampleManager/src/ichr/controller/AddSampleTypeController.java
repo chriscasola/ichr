@@ -11,12 +11,14 @@ package ichr.controller;
 
 import ichr.ICHRException;
 import ichr.database.DataStore;
-import ichr.view.ManageSampleTypesDialog;
+import ichr.view.dialogs.ManageSampleTypesDialog;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 /**
  * @author Chris Casola
@@ -51,11 +53,10 @@ public class AddSampleTypeController implements ActionListener {
 			DataStore.getDB().closeStatement(s);
 		}
 		catch (SQLException e) {
-			System.err.println("Error occurred creating a box!");
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(view, "You cannot create duplicate sample types.", "Cannot Create Duplicate Sample Types", JOptionPane.INFORMATION_MESSAGE);
 		}
 		catch (ICHRException e) {
-			System.err.println("Error occurred creating a box!");
+			System.err.println("Error occurred adding a sample type!");
 			e.printStackTrace();
 		}
 		

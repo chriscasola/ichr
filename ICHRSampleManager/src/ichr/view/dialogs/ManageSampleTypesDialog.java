@@ -7,9 +7,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package ichr.view;
+package ichr.view.dialogs;
 
-import static ichr.view.MainView.*;
+import static ichr.view.main.MainView.*;
 import ichr.controller.AddSampleTypeController;
 import ichr.controller.GetSampleTypesController;
 import ichr.controller.RemoveSampleTypeController;

@@ -7,7 +7,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
-package ichr.view.main;
+package ichr.view.dialogs;
 
 import java.awt.Component;
 import java.awt.Point;

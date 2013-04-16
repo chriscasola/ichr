@@ -9,8 +9,8 @@
  ******************************************************************************/
 package ichr.view.listeners;
 
-import ichr.view.MainTabPanel;
-import ichr.view.TabButtonPanel;
+import ichr.view.main.MainTabPanel;
+import ichr.view.panels.TabButtonPanel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

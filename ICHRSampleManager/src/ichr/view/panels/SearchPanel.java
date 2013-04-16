@@ -9,7 +9,7 @@
  ******************************************************************************/
 package ichr.view.panels;
 
-import static ichr.view.MainView.*;
+import static ichr.view.main.MainView.*;
 
 import static javax.swing.SpringLayout.*;
 
@@ -18,9 +18,7 @@ import ichr.model.SamplesTableModel;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;

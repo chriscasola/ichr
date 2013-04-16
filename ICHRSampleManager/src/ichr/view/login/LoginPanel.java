@@ -9,12 +9,12 @@
  ******************************************************************************/
 package ichr.view.login;
 
-import static ichr.view.MainView.*;
+import static ichr.view.main.MainView.*;
 
 import static javax.swing.SpringLayout.*; 
 
 import ichr.database.DataStore;
-import ichr.view.HeaderPanel;
+import ichr.view.panels.HeaderPanel;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;

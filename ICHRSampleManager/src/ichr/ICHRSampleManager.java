@@ -10,8 +10,8 @@
 package ichr;
 
 import ichr.database.DataStore;
-import ichr.view.MainView;
 import ichr.view.login.LoginView;
+import ichr.view.main.MainView;
 
 import java.sql.SQLException;
 
