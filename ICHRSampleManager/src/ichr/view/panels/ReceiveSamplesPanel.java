@@ -15,8 +15,13 @@ import static javax.swing.SpringLayout.*;
 
 import ichr.controller.GetSampleTypesController;
 import ichr.controller.GetSupplierController;
+import ichr.model.SampleTypesModel;
+import ichr.view.ManageSampleTypesDialog;
+import ichr.view.main.ModalDialog;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -47,7 +52,8 @@ public class ReceiveSamplesPanel extends JPanel {
 	protected JComboBox cmbSupplier;
 	protected JLabel lblSampleType;
 	protected JComboBox cmbSampleType;
-	protected JButton btnAddSampleType;
+	protected SampleTypesModel cmbSampleTypeModel;
+	protected JButton btnManageSampleTypes;
 	protected JLabel lblNumSamples;
 	protected JTextField txtNumSamples;
 	protected JLabel lblSampleVolume;
@@ -96,8 +102,8 @@ public class ReceiveSamplesPanel extends JPanel {
 		layout.putConstraint(EAST, lblSampleType, LABEL_WIDTH, WEST, this);
 		layout.putConstraint(VERTICAL_CENTER, cmbSampleType, 0, VERTICAL_CENTER, lblSampleType);
 		layout.putConstraint(WEST, cmbSampleType, 10, EAST, lblSampleType);
-		layout.putConstraint(VERTICAL_CENTER, btnAddSampleType, 0, VERTICAL_CENTER, cmbSampleType);
-		layout.putConstraint(WEST, btnAddSampleType, 30, EAST, cmbSampleType);
+		layout.putConstraint(VERTICAL_CENTER, btnManageSampleTypes, 0, VERTICAL_CENTER, cmbSampleType);
+		layout.putConstraint(WEST, btnManageSampleTypes, 30, EAST, cmbSampleType);
 		
 		// layout number of samples
 		layout.putConstraint(NORTH, lblNumSamples, VERTICAL_SPACING, SOUTH, cmbSampleType);
@@ -145,7 +151,7 @@ public class ReceiveSamplesPanel extends JPanel {
 		add(cmbSupplier);
 		add(lblSampleType);
 		add(cmbSampleType);
-		add(btnAddSampleType);
+		add(btnManageSampleTypes);
 		add(lblNumSamples);
 		add(txtNumSamples);
 		add(lblSampleVolume);
@@ -172,11 +178,21 @@ public class ReceiveSamplesPanel extends JPanel {
 		cmbSupplier = new JComboBox(new GetSupplierController().getSupplierNames());
 		
 		lblSampleType = new JLabel("Sample Type: ");
-		cmbSampleType = new JComboBox(new GetSampleTypesController().getTypes());
+		cmbSampleTypeModel = new SampleTypesModel();
+		cmbSampleTypeModel.updateModel(new GetSampleTypesController().getTypes());
+		cmbSampleType = new JComboBox(cmbSampleTypeModel);
 		
-		btnAddSampleType = new JButton("+");
-		final Dimension currSize = btnAddSampleType.getPreferredSize();
-		btnAddSampleType.setPreferredSize(new Dimension((int) (currSize.width * .33), (int) (currSize.height * .75)));
+		btnManageSampleTypes = new JButton("Manage Sample Types");
+		final JPanel parent = this;
+		btnManageSampleTypes.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				final ModalDialog dialog = new ModalDialog(parent, new ManageSampleTypesDialog());
+				((ManageSampleTypesDialog) dialog.getContentPane()).getNewTypeField().requestFocusInWindow();
+				dialog.setVisible(true);
+				cmbSampleTypeModel.updateModel(new GetSampleTypesController().getTypes());
+			}
+		});
 		
 		lblNumSamples = new JLabel("Sample Count: ");
 		txtNumSamples = new JTextField(2);
