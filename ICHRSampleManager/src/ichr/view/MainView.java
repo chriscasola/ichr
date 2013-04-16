@@ -22,7 +22,6 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SpringLayout;
@@ -33,7 +32,7 @@ import javax.swing.SpringLayout;
  *
  */
 @SuppressWarnings("serial")
-public class MainTabView extends JFrame {
+public class MainView extends JFrame {
 	
 	protected final TabButtonPanel tabButtonPanel;
 	protected final MainTabPanel mainTabPanel;
@@ -46,7 +45,7 @@ public class MainTabView extends JFrame {
 	protected static final int WINDOW_WIDTH = 800;
 	protected static final int WINDOW_HEIGHT = 600;
 
-	public MainTabView(String applicationName) {
+	public MainView(String applicationName) {
 		super(applicationName);
 		
 		// Construct the content panel
@@ -54,12 +53,7 @@ public class MainTabView extends JFrame {
 		SpringLayout layout = new SpringLayout();
 		content.setLayout(layout);
 
-		headerPanel = new JPanel();
-		final JLabel lblHeader = new JLabel("ICHR Sample Management System");
-		lblHeader.setFont(lblHeader.getFont().deriveFont(18f));
-		headerPanel.add(lblHeader);
-		headerPanel.setBackground(new Color(111,173,43));
-		headerPanel.setBorder(null);
+		headerPanel = new HeaderPanel();
 		
 		tabButtonPanel = new TabButtonPanel();
 		tabButtonPanel.setBackground(new Color(179,243,109));
@@ -114,9 +108,10 @@ public class MainTabView extends JFrame {
 
 		// Set the window size and position
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int xPos = (dim.width - WINDOW_WIDTH) / 2;
+		int width = content.getPreferredSize().width;
+		int xPos = (dim.width - width) / 2;
 		int yPos = (int)((dim.height - WINDOW_HEIGHT) / 2 * .75);
-		setBounds(xPos, yPos, WINDOW_WIDTH, WINDOW_HEIGHT);
+		setBounds(xPos, yPos, width, WINDOW_HEIGHT);
 	}
 	
 	public void setupTabPanelListeners() {

@@ -9,7 +9,7 @@
  ******************************************************************************/
 package ichr.view.panels;
 
-import static ichr.view.MainTabView.*;
+import static ichr.view.MainView.*;
 
 import static javax.swing.SpringLayout.*;
 

@@ -10,7 +10,7 @@
 package ichr;
 
 import ichr.database.DataStore;
-import ichr.view.MainTabView;
+import ichr.view.MainView;
 import ichr.view.login.LoginView;
 
 import java.sql.SQLException;
@@ -63,7 +63,7 @@ public class ICHRSampleManager {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				final MainTabView mainView = new MainTabView(applicationName);
+				final MainView mainView = new MainView(applicationName);
 				mainView.pack();
 				mainView.setVisible(true);
 				mainView.setMinimumSize(mainView.getSize());

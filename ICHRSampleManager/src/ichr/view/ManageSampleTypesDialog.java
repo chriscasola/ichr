@@ -9,7 +9,7 @@
  ******************************************************************************/
 package ichr.view;
 
-import static ichr.view.MainTabView.*;
+import static ichr.view.MainView.*;
 import ichr.controller.AddSampleTypeController;
 import ichr.controller.GetSampleTypesController;
 import ichr.controller.RemoveSampleTypeController;

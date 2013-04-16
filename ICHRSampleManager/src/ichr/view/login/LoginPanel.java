@@ -9,15 +9,19 @@
  ******************************************************************************/
 package ichr.view.login;
 
-import ichr.database.DataStore;
+import static ichr.view.MainView.*;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
+import static javax.swing.SpringLayout.*; 
+
+import ichr.database.DataStore;
+import ichr.view.HeaderPanel;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.SpringLayout;
 
 /**
  * Panel containing the login form
@@ -29,50 +33,69 @@ import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class LoginPanel extends JPanel {
 	
-	protected final JTextField txtUserName;
+	protected JPanel headerPanel;
+	protected JLabel lblUserName;
+	protected JTextField txtUserName;
+	protected JLabel lblPassword;
+	protected JPasswordField txtPassword;
+	protected JButton btnLogin;
 	
-	protected final JPasswordField txtPassword;
+	private static final int LABEL_WIDTH = 150;
 	
-	protected final JButton btnLogin;
+	private final SpringLayout layout;
 	
-	public static final int LABEL_SPACING = 15; //px
-
 	public LoginPanel() {
-		// Construct fields
+		layout = new SpringLayout();
+		setLayout(layout);
+		
+		constructComponents();
+		addComponents();
+	}
+	
+	private void addComponents() {
+		// layout header panel
+		layout.putConstraint(NORTH, headerPanel, 0, NORTH, this);
+		layout.putConstraint(WEST, headerPanel, 0, WEST, this);
+		layout.putConstraint(EAST, headerPanel, 0, EAST, this);
+		layout.putConstraint(SOUTH, headerPanel, 50, NORTH, headerPanel);
+		
+		// layout username
+		layout.putConstraint(NORTH, lblUserName, SECTION_SPACING, SOUTH, headerPanel);
+		layout.putConstraint(EAST, lblUserName, LABEL_WIDTH, WEST, this);
+		layout.putConstraint(VERTICAL_CENTER, txtUserName, 0, VERTICAL_CENTER, lblUserName);
+		layout.putConstraint(WEST, txtUserName, 10, EAST, lblUserName);
+		
+		// layout password
+		layout.putConstraint(NORTH, lblPassword, VERTICAL_SPACING, SOUTH, txtUserName);
+		layout.putConstraint(EAST, lblPassword, LABEL_WIDTH, WEST, this);
+		layout.putConstraint(VERTICAL_CENTER, txtPassword, 0, VERTICAL_CENTER, lblPassword);
+		layout.putConstraint(WEST, txtPassword, 10, EAST, lblPassword);
+		
+		// layout login button
+		layout.putConstraint(NORTH, btnLogin, SECTION_SPACING, SOUTH, txtPassword);
+		layout.putConstraint(WEST, btnLogin, 0, WEST, txtPassword);
+		
+		layout.putConstraint(EAST, this, SECTION_SPACING, EAST, txtPassword);
+		layout.putConstraint(SOUTH, this, SECTION_SPACING, SOUTH, btnLogin);
+				
+		add(headerPanel);
+		add(lblUserName);
+		add(txtUserName);
+		add(lblPassword);
+		add(txtPassword);
+		add(btnLogin);
+	}
+	
+	private void constructComponents() {
+		headerPanel = new HeaderPanel();
+		
+		lblUserName = new JLabel("Username: ");
 		txtUserName = new JTextField(DataStore.USER_NAME_LEN);
+		
+		lblPassword = new JLabel("Password: ");
 		txtPassword = new JPasswordField(DataStore.PASSWORD_LEN);
-		txtUserName.setMaximumSize(txtUserName.getPreferredSize());
-		txtPassword.setMaximumSize(txtPassword.getPreferredSize());
+		
 		btnLogin = new JButton("Login");
-		
-		// Create inner panels
-		final JPanel labelPanel = new JPanel();
-		final JPanel fieldPanel = new JPanel();
-		labelPanel.setLayout(new BoxLayout(labelPanel, BoxLayout.PAGE_AXIS));
-		fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.PAGE_AXIS));
-		
-		// Set layout of login panel
-		setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-		
-		// Add labels
-		labelPanel.add(new JLabel("Username:"));
-		labelPanel.add(Box.createVerticalStrut(LABEL_SPACING));
-		labelPanel.add(new JLabel("Password:"));
-		fieldPanel.add(Box.createVerticalGlue());
-		add(Box.createHorizontalGlue());
-		add(labelPanel);
-
-		// Leave space between labels and fields
-		add(Box.createHorizontalStrut(10));
-		
-		// Add fields
-		fieldPanel.add(txtUserName);
-		fieldPanel.add(txtPassword);
-		fieldPanel.add(Box.createVerticalStrut(20));
-		fieldPanel.add(btnLogin);
-		fieldPanel.add(Box.createVerticalGlue());
-		add(fieldPanel);
-		add(Box.createHorizontalGlue());
 	}
 	
 	/**
