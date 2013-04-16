@@ -13,8 +13,16 @@ import static ichr.view.MainTabView.*;
 
 import static javax.swing.SpringLayout.*;
 
-import java.awt.GridLayout;
+import ichr.model.SamplesTableModel;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -24,7 +32,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpringLayout;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * @author Chris Casola
@@ -46,7 +53,9 @@ public class SearchPanel extends JPanel {
 	protected JRadioButton btnSampleType;
 	protected JRadioButton btnSupplierName;
 	protected JButton btnSearch;
+	protected JButton btnReset;
 	protected JTable sampleTable;
+	protected SamplesTableModel sampleModel;
 	protected JScrollPane sampleTableScroll;
 
 	public SearchPanel() {
@@ -82,6 +91,11 @@ public class SearchPanel extends JPanel {
 		layout.putConstraint(NORTH, btnSearch, 5, SOUTH, txtQuery);
 		layout.putConstraint(WEST, btnSearch, 25, EAST, txtQuery);
 		
+		// layout reset button
+		layout.putConstraint(NORTH, btnReset, VERTICAL_SPACING, SOUTH, btnSearch);
+		layout.putConstraint(WEST, btnReset, 0, WEST, btnSearch);
+		layout.putConstraint(EAST, btnReset, 0, EAST, btnSearch);
+		
 		// layout the search results
 		layout.putConstraint(NORTH, sampleTableScroll, SECTION_SPACING, SOUTH, btnGroupPanel);
 		layout.putConstraint(EAST, sampleTableScroll, -15, EAST, this);
@@ -93,6 +107,7 @@ public class SearchPanel extends JPanel {
 		add(lblSearchBy);
 		add(btnGroupPanel);
 		add(btnSearch);
+		add(btnReset);
 		add(sampleTableScroll);
 	}
 	
@@ -107,46 +122,55 @@ public class SearchPanel extends JPanel {
 		btnCensusNum = new JRadioButton("Census Number");
 		btnSampleType = new JRadioButton("Sample Type");
 		btnSupplierName = new JRadioButton("Supplier Name");
+		searchByGroup.add(btnSampleNum);
+		searchByGroup.add(btnBoxNum);
+		searchByGroup.add(btnCensusNum);
+		searchByGroup.add(btnSampleType);
+		searchByGroup.add(btnSupplierName);
 		searchByGroup.setSelected(btnSampleNum.getModel(), true);
 		
 		btnSearch = new JButton("Search");
 		
-		// dummy data
-		Object[] columnNames = {
-				"Sample Number",
-				"Sample Type",
-				"Census Number",
-				"Box Number",
-				"Supplier Name"
-		};
-		Object [][] data = {
-				{"1A27506_3", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_4", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_5", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_6", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_7", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_8", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_9", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_10", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_11", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_12", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_13", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_14", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_15", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_16", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_17", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_18", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_19", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_20", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_21", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_22", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_23", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_24", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_25", "serum", "1A27506", "0246", "Acme"},
-				{"1A27506_26", "serum", "1A27506", "0246", "Acme"},
-		};
-		DefaultTableModel sampleTableModel = new DefaultTableModel(data, columnNames);
-		sampleTable = new JTable(sampleTableModel);
+		btnReset = new JButton("Reset");
+		btnReset.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				txtQuery.setText("");
+				btnSearch.doClick();
+			}
+		});
+		
+		sampleModel = new SamplesTableModel();
+		sampleTable = new JTable(sampleModel);
+		sampleTable.setAutoCreateRowSorter(true);
 		sampleTableScroll = new JScrollPane(sampleTable);
+	}
+
+	public SamplesTableModel getSamplesTableModel() {
+		return sampleModel;
+	}
+	
+	public JTable getSamplesTable() {
+		return sampleTable;
+	}
+	
+	public JButton getSearchButton() {
+		return btnSearch;
+	}
+	
+	public JTextField getQueryField() {
+		return txtQuery;
+	}
+	
+	public JRadioButton getSelectedButton() {
+		Enumeration<AbstractButton> buttons = searchByGroup.getElements();
+		AbstractButton retVal;
+		while (buttons.hasMoreElements()) {
+			retVal = buttons.nextElement();
+			if (retVal.isSelected()) {
+				return (JRadioButton) retVal;
+			}
+		}
+		return null;
 	}
 }

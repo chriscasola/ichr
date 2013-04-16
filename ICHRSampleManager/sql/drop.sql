@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS proj_assignments;
-DROP TABLE IF EXISTS thaw_dates;
-DROP TABLE IF EXISTS sample_uses;
-DROP TABLE IF EXISTS samples;
-DROP TABLE IF EXISTS boxes;
-DROP TABLE IF EXISTS projects;
-DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS freezers;
+DROP TABLE IF EXISTS ichr.freezer_shelves;
+DROP TABLE IF EXISTS ichr.freezers;
+DROP TABLE IF EXISTS ichr.sample_uses;
+DROP TABLE IF EXISTS ichr.samples;
+DROP TABLE IF EXISTS ichr.boxes;
+DROP TABLE IF EXISTS ichr.sample_types;
+DROP TABLE IF EXISTS ichr.suppliers;
+DROP TABLE IF EXISTS ichr.users;
+DROP TABLE IF EXISTS ichr.contacts;

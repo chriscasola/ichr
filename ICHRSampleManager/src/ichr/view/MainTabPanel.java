@@ -9,6 +9,8 @@
  ******************************************************************************/
 package ichr.view;
 
+import ichr.controller.ReceiveBoxController;
+import ichr.controller.SearchSamplesController;
 import ichr.view.panels.CheckInPanel;
 import ichr.view.panels.CheckOutPanel;
 import ichr.view.panels.HelpPanel;
@@ -31,6 +33,9 @@ public class MainTabPanel extends JPanel {
 
 	private final CardLayout layout;
 	
+	private final SearchPanel searchView;
+	private final ReceiveSamplesPanel receiveSamplesView;
+	
 	public MainTabPanel() {
 		
 		// Setup the layout
@@ -40,8 +45,17 @@ public class MainTabPanel extends JPanel {
 		// Add panels
 		add(new CheckOutPanel(), "Check Out");
 		add(new CheckInPanel(), "Check In");
-		add(new SearchPanel(), "Search");
-		add(new ReceiveSamplesPanel(), "Receive Samples");
+		
+		searchView = new SearchPanel();
+		add(searchView, "Search");
+		SearchSamplesController searchController = new SearchSamplesController(searchView);
+		searchView.getSearchButton().addActionListener(searchController);
+		searchController.getData();
+		
+		receiveSamplesView = new ReceiveSamplesPanel();
+		add(receiveSamplesView, "Receive Samples");
+		receiveSamplesView.getAddButton().addActionListener(new ReceiveBoxController(receiveSamplesView));
+		
 		add(new ReportsPanel(), "Reports");
 		add(new UsersPanel(), "Users");
 		add(new HelpPanel(), "Help");

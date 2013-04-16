@@ -12,13 +12,10 @@ package ichr;
 import ichr.database.DataStore;
 import ichr.view.MainTabView;
 import ichr.view.login.LoginView;
-import ichr.view.main.MainView;
 
 import java.sql.SQLException;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  * The main runner class for the Sample Manager application
@@ -38,7 +35,7 @@ public class ICHRSampleManager {
 	 */
 	public static void main(String[] args) {
 		// Open database connection and create tables if necessary
-		/*
+		
 		try {
 			DataStore.getDB().openConnection();
 			
@@ -49,9 +46,8 @@ public class ICHRSampleManager {
 		catch (SQLException e) { // exit if unable to open database connection
 			System.err.println("Could not open database connection!");
 			System.exit(1);
-		}*/
-		showMainWindow();
-		/*
+		}
+
 		// Start the GUI
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -59,7 +55,7 @@ public class ICHRSampleManager {
 				final LoginView loginView = new LoginView(applicationName);
 				loginView.setVisible(true);
 			}
-		});*/
+		});
 	}
 
 	public static void showMainWindow() {
@@ -71,8 +67,6 @@ public class ICHRSampleManager {
 				mainView.pack();
 				mainView.setVisible(true);
 				mainView.setMinimumSize(mainView.getSize());
-				//final MainView mainView = new MainView(applicationName);
-				//mainView.setVisible(true);
 			}
 		});
 	}
