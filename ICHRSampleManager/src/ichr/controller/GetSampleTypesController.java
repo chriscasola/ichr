@@ -12,35 +12,44 @@ package ichr.controller;
 import ichr.ICHRException;
 import ichr.database.DataStore;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Chris Casola
- * @version Apr 8, 2013
+ * @version Apr 16, 2013
  *
  */
-public class CheckOutController implements ActionListener {
+public class GetSampleTypesController {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-	}
-	
-	protected void checkOutSample(String sample, String username) throws ICHRException {
+	public String[] getTypes() {
+		List<String> retVal = new ArrayList<String>();
 		PreparedStatement s;
-		// Create a checkout entry in the database
-		s = DataStore.getDB().getPreparedStatement("INSERT INTO sample_uses (sample_barcode, username) VALUES (?, ?)");
 		try {
-			s.setString(1, sample);
-			s.setString(2, username);
-			s.executeUpdate();
-			DataStore.getDB().getConnection().commit();
+			s = DataStore.getDB().getPreparedStatement(
+					"SELECT * FROM sample_types"
+			);
+			final ResultSet rs = s.executeQuery();
+			
+			while (rs.next()) {
+				retVal.add(rs.getString("sample_type_desc"));
+			}
+			
+			rs.close();
+			DataStore.getDB().closeStatement(s);
 		}
 		catch (SQLException e) {
-			throw new ICHRException("Cannot checkout sample: " + sample, e);
+			System.err.println("Error occurred retrieving samples!");
+			e.printStackTrace();
 		}
+		catch (ICHRException e) {
+			System.err.println("Error occurred retrieving samples!");
+			e.printStackTrace();
+		}
+		
+		return retVal.toArray(new String[0]);
 	}
 }

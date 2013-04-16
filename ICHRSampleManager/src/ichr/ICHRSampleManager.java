@@ -35,6 +35,7 @@ public class ICHRSampleManager {
 	 */
 	public static void main(String[] args) {
 		// Open database connection and create tables if necessary
+		
 		try {
 			DataStore.getDB().openConnection();
 			
@@ -46,7 +47,7 @@ public class ICHRSampleManager {
 			System.err.println("Could not open database connection!");
 			System.exit(1);
 		}
-		
+
 		// Start the GUI
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
@@ -63,7 +64,9 @@ public class ICHRSampleManager {
 			@Override
 			public void run() {
 				final MainView mainView = new MainView(applicationName);
+				mainView.pack();
 				mainView.setVisible(true);
+				mainView.setMinimumSize(mainView.getSize());
 			}
 		});
 	}

@@ -40,7 +40,7 @@ public class SamplesTableModel extends AbstractTableModel {
 			for (int i = 0; i < columnNames.length; i++) {
 				columnNames[i] = rs.getMetaData().getColumnLabel(i+1);
 			}
-			
+			data.clear();
 			// update data
 			while (rs.next()) {
 				Object[] newSample = new Object[columnNames.length];

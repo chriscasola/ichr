@@ -35,15 +35,19 @@ public class DataStore {
 	private static DataStore instance = null;
 	private Connection connection = null;
 	
+	/*private static final String PROD_DB = "ichr";
+	private static final String PROD_USER = "ichr";
+	private static final String PROD_PWD = "P@ssw0rd";*/
+	
 	private static final String PROD_DB = "ichr";
 	private static final String PROD_USER = "ichr";
-	private static final String PROD_PWD = "P@ssw0rd";
+	private static final String PROD_PWD = "mis4720wpi13";
 	
 	private static final String TEST_DB = "ichr_test";
 	private static final String TEST_USER = "ichr";
-	private static final String TEST_PWD = "P@ssw0rd";
+	private static final String TEST_PWD = "mis4720wpi13";
 	
-	private static final String MYSQL_SERVER = "ccasola.dyndns.biz:3306";
+	private static final String MYSQL_SERVER = "ec2-54-234-148-102.compute-1.amazonaws.com:3306";
 	
 	/** The length of the username field */
 	public static final int USER_NAME_LEN = 15;

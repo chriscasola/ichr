@@ -11,51 +11,45 @@ package ichr.controller;
 
 import ichr.ICHRException;
 import ichr.database.DataStore;
-import ichr.view.main.BrowseSamplesPanel;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Chris Casola
- * @version Apr 8, 2013
+ * @version Apr 16, 2013
  *
  */
-public class BrowseSamplesController implements ActionListener {
-	
-	private final BrowseSamplesPanel view;
-	
-	public BrowseSamplesController(BrowseSamplesPanel view) {
-		this.view = view;
-		refreshSamples();
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		refreshSamples();
-	}
+public class GetSupplierController {
 
-	public void refreshSamples() {
+	public String[] getSupplierNames() {
+		List<String> retVal = new ArrayList<String>();
 		PreparedStatement s;
 		try {
 			s = DataStore.getDB().getPreparedStatement(
-					"SELECT samples.sample_barcode, sample_name, username, time_out, time_in " +
-					"FROM samples " +
-					"LEFT JOIN sample_uses " +
-					"ON samples.sample_barcode = sample_uses.sample_barcode"
+					"SELECT supplier_name FROM suppliers"
 			);
 			final ResultSet rs = s.executeQuery();
-			view.getSamplesTableModel().updateTable(rs);
+			
+			while (rs.next()) {
+				retVal.add(rs.getString("supplier_name"));
+			}
+			
 			rs.close();
+			DataStore.getDB().closeStatement(s);
 		}
 		catch (SQLException e) {
-			System.err.println("Error occurred retrieving samples!");
+			System.err.println("Error occurred retrieving suppliers!");
+			e.printStackTrace();
 		}
 		catch (ICHRException e) {
-			System.err.println("Error occurred retrieving samples!");
+			System.err.println("Error occurred retrieving suppliers!");
+			e.printStackTrace();
 		}
+		
+		return retVal.toArray(new String[0]);
 	}
 }
