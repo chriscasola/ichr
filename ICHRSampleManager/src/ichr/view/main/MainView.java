@@ -14,6 +14,7 @@ import static javax.swing.SpringLayout.*;
 import ichr.database.DataStore;
 import ichr.view.listeners.TabButtonListener;
 import ichr.view.panels.HeaderPanel;
+import ichr.view.panels.StatusPanel;
 import ichr.view.panels.TabButtonPanel;
 
 import java.awt.Color;
@@ -39,6 +40,7 @@ public class MainView extends JFrame {
 	protected final TabButtonPanel tabButtonPanel;
 	protected final MainTabPanel mainTabPanel;
 	protected final JPanel headerPanel;
+	protected final StatusPanel statusPanel;
 	
 	public static final int LABEL_WIDTH = 200;
 	public static final int SECTION_SPACING = 35;
@@ -64,6 +66,8 @@ public class MainView extends JFrame {
 		
 		mainTabPanel = new MainTabPanel();
 		
+		statusPanel = new StatusPanel();
+		
 		// Setup constraints
 		layout.putConstraint(NORTH, headerPanel, 0, NORTH, content);
 		layout.putConstraint(WEST, headerPanel, 0, WEST, content);
@@ -79,12 +83,18 @@ public class MainView extends JFrame {
 		layout.putConstraint(WEST, mainTabPanel, 5, WEST, content);
 		layout.putConstraint(EAST, mainTabPanel, -5, EAST, content);
 		
-		layout.putConstraint(SOUTH, content, 5, SOUTH, mainTabPanel);
+		layout.putConstraint(NORTH, statusPanel, 15, SOUTH, mainTabPanel);
+		layout.putConstraint(WEST, statusPanel, 0, WEST, content);
+		layout.putConstraint(EAST, statusPanel, 0, EAST, content);
+		layout.putConstraint(SOUTH, statusPanel, 18, NORTH, statusPanel);
+		
+		layout.putConstraint(SOUTH, content, 0, SOUTH, statusPanel);
 		
 		// Add components
 		content.add(headerPanel);
 		content.add(tabButtonPanel);
 		content.add(mainTabPanel);
+		content.add(statusPanel);
 		
 		// Setup listeners for the tab panel
 		setupTabPanelListeners();

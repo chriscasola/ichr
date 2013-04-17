@@ -9,6 +9,7 @@
  ******************************************************************************/
 package ichr.view.main;
 
+import ichr.controller.AddUserController;
 import ichr.controller.ChangePasswordController;
 import ichr.controller.DeleteUserController;
 import ichr.controller.ReceiveBoxController;
@@ -44,7 +45,8 @@ public class MainTabPanel extends JPanel {
 	private final SearchPanel searchView;
 	private final ReceiveSamplesPanel receiveSamplesView;
 	private final CheckOutPanel checkOutView;
-	private final UsersPanel usersPanel;
+	private final CheckInPanel checkInView;
+	private final UsersPanel usersView;
 	
 	public MainTabPanel() {
 		
@@ -55,12 +57,12 @@ public class MainTabPanel extends JPanel {
 		// Add check out panel
 		checkOutView = new CheckOutPanel();
 		add(checkOutView, "Check Out");
-		final RetrieveSampleController retrieveSampleController = new RetrieveSampleController();
+		final RetrieveSampleController checkOutController = new RetrieveSampleController();
 		checkOutView.getSampleNumField().addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent e) {
-				if (retrieveSampleController.isValidId(checkOutView.getSampleNumField().getText())) {
-					checkOutView.fillInFields(retrieveSampleController);
+				if (checkOutController.isValidId(checkOutView.getSampleNumField().getText())) {
+					checkOutView.fillInFields(checkOutController);
 				}
 				else {
 					checkOutView.clearFields();
@@ -70,7 +72,7 @@ public class MainTabPanel extends JPanel {
 		checkOutView.getBtnCheckOut().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (retrieveSampleController.checkOutSample(checkOutView.getCommentField().getText())) {
+				if (checkOutController.checkOutSample(checkOutView.getCommentField().getText())) {
 					checkOutView.clearFields();
 					checkOutView.getSampleNumField().setText("");
 					checkOutView.getCommentField().setText("");
@@ -83,7 +85,34 @@ public class MainTabPanel extends JPanel {
 		});
 		
 		// add check in panel
-		add(new CheckInPanel(), "Check In");
+		checkInView = new CheckInPanel();
+		add(checkInView, "Check In");
+		final RetrieveSampleController checkInController = new RetrieveSampleController();
+		checkInView.getSampleNumField().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (checkInController.isValidId(checkInView.getSampleNumField().getText())) {
+					checkInView.fillInFields(checkInController);
+				}
+				else {
+					checkInView.clearFields();
+				}
+			}
+		});
+		checkInView.getCheckInButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if (checkInController.checkInSample(checkInView.getCommentField().getText(), checkInView.getSampleEmpty())) {
+					checkInView.clearFields();
+					checkInView.getSampleNumField().setText("");
+					checkInView.getCommentField().setText("");
+					checkInView.showMessage("Sample Checked In");
+				}
+				else {
+					JOptionPane.showMessageDialog(checkInView, "The sample was never checked out!", "Sample Not Checked Out", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
 		
 		// add search panel
 		searchView = new SearchPanel();
@@ -99,10 +128,11 @@ public class MainTabPanel extends JPanel {
 		add(new ReportsPanel(), "Reports");
 		
 		// add users panel
-		usersPanel = new UsersPanel();
-		add(usersPanel, "Users");
-		usersPanel.getChangePwdButton().addActionListener(new ChangePasswordController(usersPanel));
-		usersPanel.getDeleteButton().addActionListener(new DeleteUserController(usersPanel));
+		usersView = new UsersPanel();
+		add(usersView, "Users");
+		usersView.getChangePwdButton().addActionListener(new ChangePasswordController(usersView));
+		usersView.getDeleteButton().addActionListener(new DeleteUserController(usersView));
+		usersView.getNewUserButton().addActionListener(new AddUserController(usersView));
 		
 		add(new HelpPanel(), "Help");
 	}

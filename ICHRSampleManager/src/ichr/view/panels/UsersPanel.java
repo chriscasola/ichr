@@ -103,6 +103,10 @@ public class UsersPanel extends JPanel {
 		return btnDelete;
 	}
 	
+	public JButton getNewUserButton() {
+		return btnNewUser;
+	}
+	
 	public JList getUsersList() {
 		return userList;
 	}

@@ -88,6 +88,55 @@ public class RetrieveSampleController {
 		return false;
 	}
 	
+	public boolean checkInSample(String comment, boolean isEmpty) {
+		if (!isAlreadyCheckedOut()) {
+			return false;
+		}
+		
+		PreparedStatement s = null;
+		try {
+			s = DataStore.getDB().getPreparedStatement(
+					"UPDATE sample_uses " +
+					"SET time_in = CURRENT_TIMESTAMP, comment_out = ? " +
+					"WHERE sample_id = ? " +
+					"AND time_in = '0000-00-00 00:00:00'"
+			);
+			s.setString(1, comment);
+			s.setString(2, sampleId);
+			if (s.executeUpdate() > 0) {
+				DataStore.getDB().getConnection().commit();
+				DataStore.getDB().closeStatement(s);
+				
+				if (isEmpty) {
+					s = DataStore.getDB().getPreparedStatement(
+							"UPDATE samples SET is_empty = ? " +
+							"WHERE sample_id = ?"
+					);
+					s.setBoolean(1, true);
+					s.setString(2, sampleId);
+					s.executeUpdate();
+					DataStore.getDB().getConnection().commit();
+				}
+				
+				return true;
+			}
+			
+		}
+		catch (ICHRException e) {
+			System.out.println("Error occurred checking in sample");
+			e.printStackTrace();
+		}
+		catch (SQLException e) {
+			System.out.println("Error occurred checking in sample");
+			e.printStackTrace();
+		}
+		finally {
+			DataStore.getDB().closeStatement(s);
+		}
+		
+		return false;
+	}
+	
 	public boolean checkOutSample(String comment) {
 		if (isAlreadyCheckedOut()) {
 			return false;
@@ -103,8 +152,14 @@ public class RetrieveSampleController {
 			s.setString(2, ICHRSampleManager.getUsername());
 			s.setString(3, comment);
 			if (s.executeUpdate() > 0) {
+				s.close();
+				s = DataStore.getDB().getPreparedStatement(
+						"UPDATE samples SET thaw_count = thaw_count + 1 " +
+						"WHERE sample_id = ?"
+				);
+				s.setString(1, sampleId);
+				s.executeUpdate();
 				DataStore.getDB().getConnection().commit();
-				DataStore.getDB().closeStatement(s);
 				return true;
 			}
 		}
