@@ -66,11 +66,12 @@ public class ManageSampleTypesDialog extends JPanel {
 		// layout the text field
 		layout.putConstraint(NORTH, txtNewSampleType, VERTICAL_SPACING, SOUTH, lstSampleTypesScroll);
 		layout.putConstraint(WEST, txtNewSampleType, VERTICAL_SPACING, WEST, this);
-		layout.putConstraint(EAST, txtNewSampleType, VERTICAL_SPACING * -1, WEST, btnAddSampleType);
+		layout.putConstraint(EAST, txtNewSampleType, 0, EAST, lstSampleTypesScroll);
 		
 		// layout the add button
 		layout.putConstraint(VERTICAL_CENTER, btnAddSampleType, 0, VERTICAL_CENTER, txtNewSampleType);
-		layout.putConstraint(EAST, btnAddSampleType, 0, EAST, lstSampleTypesScroll);
+		layout.putConstraint(WEST, btnAddSampleType, VERTICAL_SPACING, EAST, txtNewSampleType);
+		layout.putConstraint(EAST, btnAddSampleType, 0, EAST, btnRemoveSampleType);
 		
 		// layout the remove button
 		layout.putConstraint(NORTH, btnRemoveSampleType, 0, NORTH, lstSampleTypesScroll);

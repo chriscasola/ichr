@@ -87,8 +87,10 @@ public class LoginController implements ActionListener {
 			
 			// Check that the user exists and their password matches
 			if (!rs.next() || !rs.getString(1).equals(password)) {
+				rs.close();
 				throw new ICHRException("Login Failed: Incorrect password");
 			}
+			rs.close();
 		}
 		catch (SQLException e) { // Catch database access errors
 			throw new ICHRException("Error occurred trying to login", e);

@@ -10,6 +10,7 @@
 package ichr.view.main;
 
 import ichr.controller.ReceiveBoxController;
+import ichr.controller.RetrieveSampleController;
 import ichr.controller.SearchSamplesController;
 import ichr.view.panels.CheckInPanel;
 import ichr.view.panels.CheckOutPanel;
@@ -20,7 +21,12 @@ import ichr.view.panels.SearchPanel;
 import ichr.view.panels.UsersPanel;
 
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -35,6 +41,7 @@ public class MainTabPanel extends JPanel {
 	
 	private final SearchPanel searchView;
 	private final ReceiveSamplesPanel receiveSamplesView;
+	private final CheckOutPanel checkOutView;
 	
 	public MainTabPanel() {
 		
@@ -43,7 +50,35 @@ public class MainTabPanel extends JPanel {
 		setLayout(layout);
 		
 		// Add panels
-		add(new CheckOutPanel(), "Check Out");
+		checkOutView = new CheckOutPanel();
+		add(checkOutView, "Check Out");
+		final RetrieveSampleController retrieveSampleController = new RetrieveSampleController();
+		checkOutView.getSampleNumField().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				if (retrieveSampleController.isValidId(checkOutView.getSampleNumField().getText())) {
+					checkOutView.fillInFields(retrieveSampleController);
+				}
+				else {
+					checkOutView.clearFields();
+				}
+			}
+		});
+		checkOutView.getBtnCheckOut().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (retrieveSampleController.checkOutSample(checkOutView.getCommentField().getText())) {
+					checkOutView.clearFields();
+					checkOutView.getSampleNumField().setText("");
+					checkOutView.getCommentField().setText("");
+					checkOutView.showMessage("Sample Checked Out");
+				}
+				else {
+					JOptionPane.showMessageDialog(checkOutView, "The sample is already checked out!", "Sample Already Checked Out", JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		
 		add(new CheckInPanel(), "Check In");
 		
 		searchView = new SearchPanel();

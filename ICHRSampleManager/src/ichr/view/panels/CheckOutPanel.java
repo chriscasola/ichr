@@ -11,6 +11,16 @@ package ichr.view.panels;
 
 import static ichr.view.main.MainView.*;
 
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import ichr.controller.RetrieveSampleController;
+
 import static javax.swing.SpringLayout.*;
 
 import javax.swing.JButton;
@@ -33,13 +43,14 @@ public class CheckOutPanel extends JPanel {
 	
 	protected JLabel lblSampleNum;
 	protected JTextField txtSampleNum;
+	protected JLabel lblStatus;
 	protected JLabel lblCurrTime;
 	protected JLabel currTime;
 	protected JLabel lblThawCount;
 	protected JLabel thawCount;
-	protected JLabel lblPurpose;
-	protected JTextArea txtPurpose;
-	protected JScrollPane txtPurposeScroll;
+	protected JLabel lblComment;
+	protected JTextArea txtComment;
+	protected JScrollPane txtCommentScroll;
 	protected JLabel lblFreezerDesc;
 	protected JLabel freezerDesc;
 	protected JLabel lblFreezerCell;
@@ -48,6 +59,7 @@ public class CheckOutPanel extends JPanel {
 	protected JLabel boxId;
 	protected JButton btnCheckOut;
 	protected JButton btnCancel;
+	protected JLabel lblResult;
 	
 	public CheckOutPanel() {
 		layout = new SpringLayout();
@@ -65,6 +77,10 @@ public class CheckOutPanel extends JPanel {
 		layout.putConstraint(VERTICAL_CENTER, txtSampleNum, 0, VERTICAL_CENTER, lblSampleNum);
 		layout.putConstraint(WEST, txtSampleNum, 10, EAST, lblSampleNum);
 		
+		// layout status label
+		layout.putConstraint(VERTICAL_CENTER, lblStatus, 0, VERTICAL_CENTER, txtSampleNum);
+		layout.putConstraint(WEST, lblStatus, VERTICAL_SPACING, EAST, txtSampleNum);
+		
 		// layout lblCurrTime
 		layout.putConstraint(NORTH, lblCurrTime, SECTION_SPACING, SOUTH, lblSampleNum);
 		layout.putConstraint(EAST, lblCurrTime, LABEL_WIDTH, WEST, this);
@@ -77,14 +93,14 @@ public class CheckOutPanel extends JPanel {
 		layout.putConstraint(VERTICAL_CENTER, thawCount, 0, VERTICAL_CENTER, lblThawCount);
 		layout.putConstraint(WEST, thawCount, 10, EAST, lblThawCount);
 		
-		// layout lblPurpose
-		layout.putConstraint(NORTH, lblPurpose, VERTICAL_SPACING, SOUTH, lblThawCount);
-		layout.putConstraint(EAST, lblPurpose, LABEL_WIDTH, WEST, this);
-		layout.putConstraint(NORTH, txtPurposeScroll, 0, NORTH, lblPurpose);
-		layout.putConstraint(WEST, txtPurposeScroll, 10, EAST, lblPurpose);
+		// layout lblComment
+		layout.putConstraint(NORTH, lblComment, VERTICAL_SPACING, SOUTH, lblThawCount);
+		layout.putConstraint(EAST, lblComment, LABEL_WIDTH, WEST, this);
+		layout.putConstraint(NORTH, txtCommentScroll, 0, NORTH, lblComment);
+		layout.putConstraint(WEST, txtCommentScroll, 10, EAST, lblComment);
 		
 		// layout lblFreezerDesc
-		layout.putConstraint(NORTH, lblFreezerDesc, SECTION_SPACING - 5, SOUTH, txtPurposeScroll);
+		layout.putConstraint(NORTH, lblFreezerDesc, SECTION_SPACING - 5, SOUTH, txtCommentScroll);
 		layout.putConstraint(EAST, lblFreezerDesc, LABEL_WIDTH, WEST, this);
 		layout.putConstraint(VERTICAL_CENTER, freezerDesc, 0, VERTICAL_CENTER, lblFreezerDesc);
 		layout.putConstraint(WEST, freezerDesc, 10, EAST, lblFreezerDesc);
@@ -109,14 +125,19 @@ public class CheckOutPanel extends JPanel {
 		layout.putConstraint(NORTH, btnCheckOut, SECTION_SPACING, SOUTH, lblBoxId);
 		layout.putConstraint(WEST, btnCheckOut, 10, EAST, btnCancel);
 		
+		// layout lblResult
+		layout.putConstraint(VERTICAL_CENTER, lblResult, 0, VERTICAL_CENTER, btnCheckOut);
+		layout.putConstraint(WEST, lblResult, VERTICAL_SPACING, EAST, btnCheckOut);
+		
 		add(lblSampleNum);
 		add(txtSampleNum);
+		add(lblStatus);
 		add(lblCurrTime);
 		add(currTime);
 		add(lblThawCount);
 		add(thawCount);
-		add(lblPurpose);
-		add(txtPurposeScroll);
+		add(lblComment);
+		add(txtCommentScroll);
 		add(lblFreezerDesc);
 		add(freezerDesc);
 		add(lblFreezerCell);
@@ -125,34 +146,91 @@ public class CheckOutPanel extends JPanel {
 		add(boxId);
 		add(btnCancel);
 		add(btnCheckOut);
+		add(lblResult);
 	}
 	
 	private void constructComponents() {
 		lblSampleNum = new JLabel("Sample Number: ");
 		txtSampleNum = new JTextField(20);
 		
+		lblStatus = new JLabel("");
+		lblStatus.setForeground(Color.blue);
+		
 		lblCurrTime = new JLabel("Date/Time: ");
-		currTime = new JLabel("Current time here");
+		currTime = new JLabel("");
 		
 		lblThawCount = new JLabel("Thaw Count: ");
-		thawCount = new JLabel("Thaw count here");
+		thawCount = new JLabel("");
 		
-		lblPurpose = new JLabel("Purpose: ");
-		txtPurpose = new JTextArea(3, 20);
-		txtPurpose.setLineWrap(true);
-		txtPurpose.setWrapStyleWord(true);
-		txtPurposeScroll = new JScrollPane(txtPurpose);
+		lblComment = new JLabel("Purpose: ");
+		txtComment = new JTextArea(3, 20);
+		txtComment.setLineWrap(true);
+		txtComment.setWrapStyleWord(true);
+		txtCommentScroll = new JScrollPane(txtComment);
 		
 		lblFreezerDesc = new JLabel("Freezer: ");
-		freezerDesc = new JLabel("Freezer desc here");
+		freezerDesc = new JLabel("");
 		
 		lblFreezerCell = new JLabel("Position: ");
-		freezerCell = new JLabel("Freezer cell here");
+		freezerCell = new JLabel("");
 		
 		lblBoxId = new JLabel("Box ID: ");
-		boxId = new JLabel("Box id here");
+		boxId = new JLabel("");
 		
 		btnCheckOut = new JButton("Check Out");
+		
 		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				clearFields();
+				txtSampleNum.setText("");
+				txtComment.setText("");
+			}
+		});
+		
+		lblResult = new JLabel("");
+		lblResult.setForeground(Color.blue);
+	}
+
+	public void fillInFields(RetrieveSampleController controller) {
+		SimpleDateFormat formatter = new SimpleDateFormat("HH:mm MM-dd-yyyy");
+		currTime.setText(formatter.format(new Date()));
+		thawCount.setText(String.valueOf(controller.getThawCount()));
+		freezerDesc.setText(controller.getFreezerName());
+		freezerCell.setText("Row: " + controller.getFreezerRow() + "   Column: " + controller.getFreezerCol());
+		boxId.setText(controller.getBoxId());
+		lblStatus.setText("Valid Sample");
+	}
+	
+	public void clearFields() {
+		currTime.setText("");
+		thawCount.setText("");
+		freezerDesc.setText("");
+		freezerCell.setText("");
+		boxId.setText("");
+		lblStatus.setText("");
+	}
+	
+	public void showMessage(String message) {
+		lblResult.setText(message);
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				lblResult.setText("");
+			}
+		}, 5000);
+	}
+	
+	public JButton getBtnCheckOut() {
+		return btnCheckOut;
+	}
+	
+	public JTextField getSampleNumField() {
+		return txtSampleNum;
+	}
+	
+	public JTextArea getCommentField() {
+		return txtComment;
 	}
 }

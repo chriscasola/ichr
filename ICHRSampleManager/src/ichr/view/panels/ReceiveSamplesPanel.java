@@ -29,6 +29,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -67,9 +68,6 @@ public class ReceiveSamplesPanel extends JPanel {
 	protected JLabel lblPlannedUse;
 	protected JTextArea txtPlannedUse;
 	protected JScrollPane txtPlannedUseScroll;
-	protected JLabel lblFreezerAssignment;
-	protected JLabel lblFreezerID;
-	protected JLabel lblFreezerCell;
 	protected JButton btnAdd;
 	protected JLabel lblStatus;
 
@@ -134,16 +132,8 @@ public class ReceiveSamplesPanel extends JPanel {
 		layout.putConstraint(NORTH, txtPlannedUseScroll, 0, NORTH, lblPlannedUse);
 		layout.putConstraint(WEST, txtPlannedUseScroll, 10, EAST, lblPlannedUse);
 		
-		// layout freezer assignment
-		layout.putConstraint(NORTH, lblFreezerAssignment, SECTION_SPACING, SOUTH, txtPlannedUseScroll);
-		layout.putConstraint(EAST, lblFreezerAssignment, LABEL_WIDTH, WEST, this);
-		layout.putConstraint(NORTH, lblFreezerID, VERTICAL_SPACING, SOUTH, lblFreezerAssignment);
-		layout.putConstraint(WEST, lblFreezerID, LABEL_WIDTH - 100, WEST, this);
-		layout.putConstraint(NORTH, lblFreezerCell, VERTICAL_SPACING, SOUTH, lblFreezerID);
-		layout.putConstraint(WEST, lblFreezerCell, LABEL_WIDTH - 100, WEST, this);
-		
 		// layout add button
-		layout.putConstraint(NORTH, btnAdd, SECTION_SPACING, SOUTH, lblFreezerCell);
+		layout.putConstraint(NORTH, btnAdd, SECTION_SPACING, SOUTH, txtPlannedUseScroll);
 		layout.putConstraint(WEST, btnAdd, LABEL_WIDTH, WEST, this);
 		
 		// layout status label
@@ -168,9 +158,6 @@ public class ReceiveSamplesPanel extends JPanel {
 		add(btnThawedYes);
 		add(lblPlannedUse);
 		add(txtPlannedUseScroll);
-		add(lblFreezerAssignment);
-		add(lblFreezerID);
-		add(lblFreezerCell);
 		add(btnAdd);
 		add(lblStatus);
 	}
@@ -226,13 +213,9 @@ public class ReceiveSamplesPanel extends JPanel {
 		txtPlannedUse.setWrapStyleWord(true);
 		txtPlannedUseScroll = new JScrollPane(txtPlannedUse);
 		
-		lblFreezerAssignment = new JLabel("Freezer Assignment: ");
-		lblFreezerID = new JLabel("Freezer id here");
-		lblFreezerCell = new JLabel("Freezer location here");
-		
 		btnAdd = new JButton("Add");
 		
-		lblStatus = new JLabel("Status here");
+		lblStatus = new JLabel("");
 		lblStatus.setForeground(Color.BLUE);
 	}
 	
@@ -298,11 +281,10 @@ public class ReceiveSamplesPanel extends JPanel {
 		}
 	}
 	
-	public void setFreezerID(int id) {
-		lblFreezerID.setText("Freezer Number: " + id);
-	}
-	
-	public void setFreezerCell(int row, int col) {
-		lblFreezerCell.setText("Row: " + row + "   Column: " + col);
+	public void showFreezerAssignment(String freezerName, int row, int col) {
+		JOptionPane.showMessageDialog(this, 
+				"Place the box in " + freezerName + " at row " + row + " and column " + col + ".", 
+				"Freezer Assignment", 
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 }

@@ -54,13 +54,17 @@ public class ReceiveBoxController implements ActionListener {
 		PreparedStatement s = null;
 		try {
 			s = DataStore.getDB().getPreparedStatement(
-				"SELECT * FROM freezer_shelves WHERE box_id IS NULL LIMIT 1"
+				"SELECT * FROM freezer_shelves, freezers " +
+				"WHERE freezers.freezer_id = freezer_shelves.freezer_id " +
+				"AND box_id IS NULL " +
+				"LIMIT 1"
 			);
 			final ResultSet rs = s.executeQuery();
 			if (rs.next()) {
 				int freezerId = rs.getInt("freezer_id");
 				int row = rs.getInt("row");
 				int col = rs.getInt("col");
+				String freezerDesc = rs.getString("freezer_desc");
 				DataStore.getDB().closeStatement(s);
 
 				s = DataStore.getDB().getPreparedStatement(
@@ -76,8 +80,7 @@ public class ReceiveBoxController implements ActionListener {
 				s.setInt(4, col);
 				s.executeUpdate();
 				DataStore.getDB().getConnection().commit();
-				view.setFreezerCell(row, col);
-				view.setFreezerID(freezerId);
+				view.showFreezerAssignment(freezerDesc, row, col);
 			}
 			else {
 				JOptionPane.showMessageDialog(view, "There are no positions left in the freezers!", "Freezers Full", JOptionPane.WARNING_MESSAGE);

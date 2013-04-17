@@ -29,8 +29,8 @@ INSERT INTO sample_uses (sample_id, username, time_out, time_in, comment_in, com
 	('393kdndl3_1', 'sberselli', '2013-03-10 13:01:12', '2013-03-10 14:23:45', 'Still enough left for two tests', 'Brand new sample - first check out');
 
 INSERT INTO freezers (freezer_desc) VALUES
-	('freezer A'),
-	('freezer B'),
-	('freezer C'),
-	('freezer D'),
-	('freezer E');
+	('Freezer A'),
+	('Freezer B'),
+	('Freezer C'),
+	('Freezer D'),
+	('Freezer E');
