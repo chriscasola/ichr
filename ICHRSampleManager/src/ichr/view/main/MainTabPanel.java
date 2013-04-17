@@ -9,6 +9,7 @@
  ******************************************************************************/
 package ichr.view.main;
 
+import ichr.controller.ChangePasswordController;
 import ichr.controller.ReceiveBoxController;
 import ichr.controller.RetrieveSampleController;
 import ichr.controller.SearchSamplesController;
@@ -42,6 +43,7 @@ public class MainTabPanel extends JPanel {
 	private final SearchPanel searchView;
 	private final ReceiveSamplesPanel receiveSamplesView;
 	private final CheckOutPanel checkOutView;
+	private final UsersPanel usersPanel;
 	
 	public MainTabPanel() {
 		
@@ -49,7 +51,7 @@ public class MainTabPanel extends JPanel {
 		layout = new CardLayout();
 		setLayout(layout);
 		
-		// Add panels
+		// Add check out panel
 		checkOutView = new CheckOutPanel();
 		add(checkOutView, "Check Out");
 		final RetrieveSampleController retrieveSampleController = new RetrieveSampleController();
@@ -79,20 +81,28 @@ public class MainTabPanel extends JPanel {
 			}
 		});
 		
+		// add check in panel
 		add(new CheckInPanel(), "Check In");
 		
+		// add search panel
 		searchView = new SearchPanel();
 		add(searchView, "Search");
 		SearchSamplesController searchController = new SearchSamplesController(searchView);
 		searchView.getSearchButton().addActionListener(searchController);
 		searchController.getData();
 		
+		// add receive samples panel
 		receiveSamplesView = new ReceiveSamplesPanel();
 		add(receiveSamplesView, "Receive Samples");
 		receiveSamplesView.getAddButton().addActionListener(new ReceiveBoxController(receiveSamplesView));
 		
 		add(new ReportsPanel(), "Reports");
-		add(new UsersPanel(), "Users");
+		
+		// add users panel
+		usersPanel = new UsersPanel();
+		add(usersPanel, "Users");
+		usersPanel.getChangePwdButton().addActionListener(new ChangePasswordController(usersPanel));
+		
 		add(new HelpPanel(), "Help");
 	}
 	

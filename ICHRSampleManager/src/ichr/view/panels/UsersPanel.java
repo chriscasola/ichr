@@ -13,6 +13,9 @@ import static ichr.view.main.MainView.*;
 
 import static javax.swing.SpringLayout.*;
 
+import ichr.controller.GetUserNamesController;
+import ichr.controller.IsAdminController;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JPanel;
@@ -32,7 +35,7 @@ public class UsersPanel extends JPanel {
 	protected JButton btnNewUser;
 	protected JList userList;
 	protected JScrollPane userListScroll;
-	protected JButton btnEdit;
+	protected JButton btnChangePassword;
 	protected JButton btnDelete;
 	
 	public UsersPanel() {
@@ -54,31 +57,41 @@ public class UsersPanel extends JPanel {
 		layout.putConstraint(EAST, userListScroll, 300, WEST, userListScroll);
 		layout.putConstraint(SOUTH, userListScroll, 300, NORTH, userListScroll);
 		
-		// layout the edit button
-		layout.putConstraint(NORTH, btnEdit, 0, NORTH, userListScroll);
-		layout.putConstraint(WEST, btnEdit, VERTICAL_SPACING, EAST, userListScroll);
-		layout.putConstraint(EAST, btnEdit, 0, EAST, btnDelete);
+		// layout the change password button
+		layout.putConstraint(NORTH, btnChangePassword, 0, NORTH, userListScroll);
+		layout.putConstraint(WEST, btnChangePassword, VERTICAL_SPACING, EAST, userListScroll);
 		
 		// layout the delete button
-		layout.putConstraint(NORTH, btnDelete, VERTICAL_SPACING, SOUTH, btnEdit);
+		layout.putConstraint(NORTH, btnDelete, VERTICAL_SPACING, SOUTH, btnChangePassword);
 		layout.putConstraint(WEST, btnDelete, VERTICAL_SPACING, EAST, userListScroll);
+		layout.putConstraint(EAST, btnDelete, 0, EAST, btnChangePassword);
 		
 		add(btnNewUser);
 		add(userListScroll);
-		add(btnEdit);
+		add(btnChangePassword);
 		add(btnDelete);
 	}
 	
 	private void constructComponents() {
 		btnNewUser = new JButton("New User");
 		
-		// dummy data
-		Object[] users = {"Chris", "Dongni", "Silvia", "Steve"};
-		userList = new JList(users);
+		userList = new JList(GetUserNamesController.getUserNames());
 		userListScroll = new JScrollPane(userList);
 		
-		btnEdit = new JButton("Edit User");
-		
+		btnChangePassword = new JButton("Change Password");
 		btnDelete = new JButton("Delete User");
+		
+		if (!IsAdminController.isAdmin()) {
+			btnDelete.setEnabled(false);
+			btnNewUser.setEnabled(false);
+		}
+	}
+	
+	public JButton getChangePwdButton() {
+		return btnChangePassword;
+	}
+	
+	public JList getUsersList() {
+		return userList;
 	}
 }
