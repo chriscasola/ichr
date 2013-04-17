@@ -16,7 +16,10 @@ import ichr.view.panels.ReceiveSamplesPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
 
 /**
  * @author Chris Casola
@@ -42,6 +45,55 @@ public class ReceiveBoxController implements ActionListener {
 				view.getSampleVolume().getText(), 
 				view.getBoxNum().getText(), 
 				view.isThawed() ? 1 : 0);
+		getFreezerAssignment(view.getBoxNum().getText());
+		view.showMessage("New Box Saved");
+		view.clearForm();
+	}
+	
+	protected void getFreezerAssignment(String boxId) {
+		PreparedStatement s = null;
+		try {
+			s = DataStore.getDB().getPreparedStatement(
+				"SELECT * FROM freezer_shelves WHERE box_id IS NULL LIMIT 1"
+			);
+			final ResultSet rs = s.executeQuery();
+			if (rs.next()) {
+				int freezerId = rs.getInt("freezer_id");
+				int row = rs.getInt("row");
+				int col = rs.getInt("col");
+				DataStore.getDB().closeStatement(s);
+
+				s = DataStore.getDB().getPreparedStatement(
+						"UPDATE freezer_shelves " +
+						"SET box_id = ? " +
+						"WHERE freezer_id = ? " +
+						"AND row = ? " +
+						"AND col = ?"
+				);
+				s.setString(1, boxId);
+				s.setInt(2, freezerId);
+				s.setInt(3, row);
+				s.setInt(4, col);
+				s.executeUpdate();
+				DataStore.getDB().getConnection().commit();
+				view.setFreezerCell(row, col);
+				view.setFreezerID(freezerId);
+			}
+			else {
+				JOptionPane.showMessageDialog(view, "There are no positions left in the freezers!", "Freezers Full", JOptionPane.WARNING_MESSAGE);
+			}
+		}
+		catch (ICHRException e) {
+			System.err.println("Error trying to assign freezer location");
+			e.printStackTrace();
+		}
+		catch (SQLException e) {
+			System.err.println("Error trying to assign freezer location");
+			e.printStackTrace();
+		}
+		finally {
+			DataStore.getDB().closeStatement(s);
+		}
 	}
 
 	protected void addSamples(String censusNum, String plannedUse, String sampleVolume,

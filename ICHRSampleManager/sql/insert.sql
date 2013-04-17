@@ -30,8 +30,7 @@ INSERT INTO sample_uses (sample_id, username, time_out, time_in, comment_in, com
 
 INSERT INTO freezers (freezer_desc) VALUES
 	('freezer A'),
-	('freezer B');
-
-INSERT INTO freezer_shelves (freezer_id, row, col, box_id) VALUES
-	(1, 3, 5, '393kdndl3'),
-	(2, 2, 4, '39jfl13k3');
+	('freezer B'),
+	('freezer C'),
+	('freezer D'),
+	('freezer E');

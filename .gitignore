@@ -1,5 +1,7 @@
 *.class
 
+ICHRSampleManager/doc/*
+
 # Package Files #
 *.jar
 *.war

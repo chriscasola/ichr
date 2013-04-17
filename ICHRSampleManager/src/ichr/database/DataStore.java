@@ -139,6 +139,38 @@ public class DataStore {
 		executeSQLFile("./sql/drop.sql");
 		executeSQLFile("./sql/create.sql");
 		executeSQLFile("./sql/insert.sql");
+		generateEmptyFreezerGrids();
+	}
+	
+	private void generateEmptyFreezerGrids() {
+		PreparedStatement s = null;
+		try {
+			s = getPreparedStatement(
+					"INSERT INTO freezer_shelves VALUES " +
+					"(?, ?, ?, NULL);");
+			for (int i = 1; i <= 5; i++) { // for each freezer
+				for (int j = 1; j <= 9; j++) { // for each column
+					for (int k = 1; k <= 9; k++) { // for each row
+						s.setInt(1, i);
+						s.setInt(2, k);
+						s.setInt(3, j);
+						s.executeUpdate();
+					}
+				}
+			}
+			getConnection().commit();
+		}
+		catch (ICHRException e) {
+			System.err.println("Error initializing freezer shelves!");
+			e.printStackTrace();
+		} 
+		catch (SQLException e) {
+			System.err.println("Error initializing freezer shelves!");
+			e.printStackTrace();
+		}
+		finally {
+			closeStatement(s);
+		}
 	}
 	
 	public void executeSQLFile(String filePath) {

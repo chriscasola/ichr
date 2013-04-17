@@ -19,8 +19,11 @@ import ichr.model.SampleTypesModel;
 import ichr.view.dialogs.ManageSampleTypesDialog;
 import ichr.view.dialogs.ModalDialog;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -65,9 +68,10 @@ public class ReceiveSamplesPanel extends JPanel {
 	protected JTextArea txtPlannedUse;
 	protected JScrollPane txtPlannedUseScroll;
 	protected JLabel lblFreezerAssignment;
-	protected JLabel lblFreezerDesc;
+	protected JLabel lblFreezerID;
 	protected JLabel lblFreezerCell;
 	protected JButton btnAdd;
+	protected JLabel lblStatus;
 
 	public ReceiveSamplesPanel() {
 		layout = new SpringLayout();
@@ -133,14 +137,18 @@ public class ReceiveSamplesPanel extends JPanel {
 		// layout freezer assignment
 		layout.putConstraint(NORTH, lblFreezerAssignment, SECTION_SPACING, SOUTH, txtPlannedUseScroll);
 		layout.putConstraint(EAST, lblFreezerAssignment, LABEL_WIDTH, WEST, this);
-		layout.putConstraint(NORTH, lblFreezerDesc, VERTICAL_SPACING, SOUTH, lblFreezerAssignment);
-		layout.putConstraint(WEST, lblFreezerDesc, LABEL_WIDTH - 100, WEST, this);
-		layout.putConstraint(NORTH, lblFreezerCell, VERTICAL_SPACING, SOUTH, lblFreezerDesc);
+		layout.putConstraint(NORTH, lblFreezerID, VERTICAL_SPACING, SOUTH, lblFreezerAssignment);
+		layout.putConstraint(WEST, lblFreezerID, LABEL_WIDTH - 100, WEST, this);
+		layout.putConstraint(NORTH, lblFreezerCell, VERTICAL_SPACING, SOUTH, lblFreezerID);
 		layout.putConstraint(WEST, lblFreezerCell, LABEL_WIDTH - 100, WEST, this);
 		
 		// layout add button
 		layout.putConstraint(NORTH, btnAdd, SECTION_SPACING, SOUTH, lblFreezerCell);
 		layout.putConstraint(WEST, btnAdd, LABEL_WIDTH, WEST, this);
+		
+		// layout status label
+		layout.putConstraint(VERTICAL_CENTER, lblStatus, 0, VERTICAL_CENTER, btnAdd);
+		layout.putConstraint(WEST, lblStatus, VERTICAL_SPACING, EAST, btnAdd);
 		
 		add(lblBoxNum);
 		add(txtBoxNum);
@@ -161,9 +169,10 @@ public class ReceiveSamplesPanel extends JPanel {
 		add(lblPlannedUse);
 		add(txtPlannedUseScroll);
 		add(lblFreezerAssignment);
-		add(lblFreezerDesc);
+		add(lblFreezerID);
 		add(lblFreezerCell);
 		add(btnAdd);
+		add(lblStatus);
 	}
 	
 	private void constructComponents() {
@@ -186,9 +195,13 @@ public class ReceiveSamplesPanel extends JPanel {
 		btnManageSampleTypes.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				final ModalDialog dialog = new ModalDialog(parent, new ManageSampleTypesDialog());
-				((ManageSampleTypesDialog) dialog.getContentPane()).getNewTypeField().requestFocusInWindow();
-				dialog.setVisible(true);
+				final ManageSampleTypesDialog dialog = new ManageSampleTypesDialog();
+				final ModalDialog dialogWrapper = new ModalDialog(parent, dialog);
+				dialog.getNewTypeField().requestFocusInWindow();
+				dialogWrapper.pack();
+				dialogWrapper.setMinimumSize(dialogWrapper.getPreferredSize());
+				dialogWrapper.setResizable(false);
+				dialogWrapper.setVisible(true);
 				cmbSampleTypeModel.updateModel(new GetSampleTypesController().getTypes());
 			}
 		});
@@ -214,10 +227,34 @@ public class ReceiveSamplesPanel extends JPanel {
 		txtPlannedUseScroll = new JScrollPane(txtPlannedUse);
 		
 		lblFreezerAssignment = new JLabel("Freezer Assignment: ");
-		lblFreezerDesc = new JLabel("Freezer desc here");
+		lblFreezerID = new JLabel("Freezer id here");
 		lblFreezerCell = new JLabel("Freezer location here");
 		
 		btnAdd = new JButton("Add");
+		
+		lblStatus = new JLabel("Status here");
+		lblStatus.setForeground(Color.BLUE);
+	}
+	
+	public void showMessage(String message) {
+		lblStatus.setText(message);
+		new Timer().schedule(new TimerTask() {
+			@Override
+			public void run() {
+				lblStatus.setText("");
+			}
+		}, 5000);
+	}
+	
+	public void clearForm() {
+		txtBoxNum.setText("");
+		txtCensusNum.setText("");
+		cmbSupplier.setSelectedIndex(0);
+		cmbSampleType.setSelectedIndex(0);
+		txtNumSamples.setText("");
+		txtSampleVolume.setText("");
+		thawedGroup.setSelected(btnThawedNo.getModel(), true);
+		txtPlannedUse.setText("");
 	}
 	
 	public JTextField getBoxNum() {
@@ -259,5 +296,13 @@ public class ReceiveSamplesPanel extends JPanel {
 		else {
 			return true;
 		}
+	}
+	
+	public void setFreezerID(int id) {
+		lblFreezerID.setText("Freezer Number: " + id);
+	}
+	
+	public void setFreezerCell(int row, int col) {
+		lblFreezerCell.setText("Row: " + row + "   Column: " + col);
 	}
 }
