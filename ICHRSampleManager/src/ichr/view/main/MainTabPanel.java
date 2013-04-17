@@ -10,6 +10,7 @@
 package ichr.view.main;
 
 import ichr.controller.ChangePasswordController;
+import ichr.controller.DeleteUserController;
 import ichr.controller.ReceiveBoxController;
 import ichr.controller.RetrieveSampleController;
 import ichr.controller.SearchSamplesController;
@@ -95,13 +96,13 @@ public class MainTabPanel extends JPanel {
 		receiveSamplesView = new ReceiveSamplesPanel();
 		add(receiveSamplesView, "Receive Samples");
 		receiveSamplesView.getAddButton().addActionListener(new ReceiveBoxController(receiveSamplesView));
-		
 		add(new ReportsPanel(), "Reports");
 		
 		// add users panel
 		usersPanel = new UsersPanel();
 		add(usersPanel, "Users");
 		usersPanel.getChangePwdButton().addActionListener(new ChangePasswordController(usersPanel));
+		usersPanel.getDeleteButton().addActionListener(new DeleteUserController(usersPanel));
 		
 		add(new HelpPanel(), "Help");
 	}

@@ -15,6 +15,7 @@ import static javax.swing.SpringLayout.*;
 
 import ichr.controller.GetUserNamesController;
 import ichr.controller.IsAdminController;
+import ichr.model.UserNamesModel;
 
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -34,6 +35,7 @@ public class UsersPanel extends JPanel {
 	
 	protected JButton btnNewUser;
 	protected JList userList;
+	protected UserNamesModel userListModel;
 	protected JScrollPane userListScroll;
 	protected JButton btnChangePassword;
 	protected JButton btnDelete;
@@ -75,7 +77,9 @@ public class UsersPanel extends JPanel {
 	private void constructComponents() {
 		btnNewUser = new JButton("New User");
 		
-		userList = new JList(GetUserNamesController.getUserNames());
+		userListModel = new UserNamesModel();
+		userListModel.updateModel(GetUserNamesController.getUserNames());
+		userList = new JList(userListModel);
 		userListScroll = new JScrollPane(userList);
 		
 		btnChangePassword = new JButton("Change Password");
@@ -87,8 +91,16 @@ public class UsersPanel extends JPanel {
 		}
 	}
 	
+	public UserNamesModel getUsersListModel() {
+		return userListModel;
+	}
+	
 	public JButton getChangePwdButton() {
 		return btnChangePassword;
+	}
+	
+	public JButton getDeleteButton() {
+		return btnDelete;
 	}
 	
 	public JList getUsersList() {
