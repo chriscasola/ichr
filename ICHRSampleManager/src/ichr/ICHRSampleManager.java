@@ -76,6 +76,7 @@ public class ICHRSampleManager {
 				mainView = new MainView(applicationName);
 				mainView.pack();
 				mainView.setVisible(true);
+				mainView.getMainTabPanel().getCheckOutPanel().getSampleNumField().requestFocusInWindow();
 				mainView.setMinimumSize(mainView.getSize());
 				
 				mainView.addMouseMotionListener(new MouseMotionAdapter() {
@@ -103,6 +104,11 @@ public class ICHRSampleManager {
 				}
 			}
 		}, 1, 1000);
+	}
+	
+	public static void logout() {
+		sessionTimer.cancel();
+		showLogin();
 	}
 	
 	public static void showLogin() {

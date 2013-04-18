@@ -1,0 +1,7 @@
+1. Enter the query into "Query" text box.
+
+2. Select one of the search condition in "Search by" radio buttons.
+
+3.0 Click "Search" when finishing reviewing all inputs and confirm to search in the database.
+
+3.1. Click "Reset" to clear all entries and cancel the search.

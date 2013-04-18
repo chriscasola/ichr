@@ -47,7 +47,7 @@ public class SearchSamplesController implements ActionListener {
 		PreparedStatement s;
 		try {
 			s = DataStore.getDB().getPreparedStatement(
-					"SELECT sample_id AS 'Sample ID', census_num AS 'Census Number', sample_type AS 'Sample Type', planned_use AS 'Planned Use', volume AS 'Volume', boxes.box_id AS 'Box ID', thaw_count AS 'Thaw Count', supplier_name AS 'Supplier' " +
+					"SELECT sample_id AS 'Sample ID', census_num AS 'Census Number', sample_type AS 'Sample Type', supplier_name AS 'Supplier', boxes.box_id AS 'Box ID', planned_use AS 'Planned Use', volume AS 'Volume', thaw_count AS 'Thaw Count', is_empty AS 'Empty'" +
 					"FROM samples, boxes, suppliers " +
 					"WHERE samples.box_id = boxes.box_id " +
 					"AND boxes.supplier_id = suppliers.supplier_id " +
@@ -73,7 +73,7 @@ public class SearchSamplesController implements ActionListener {
 		PreparedStatement s;
 		try {
 			s = DataStore.getDB().getPreparedStatement(
-					"SELECT sample_id AS 'Sample ID', census_num AS 'Census Number', sample_type AS 'Sample Type', planned_use AS 'Planned Use', volume AS 'Volume', boxes.box_id AS 'Box ID', thaw_count AS 'Thaw Count', supplier_name AS 'Supplier' " +
+					"SELECT sample_id AS 'Sample ID', census_num AS 'Census Number', sample_type AS 'Sample Type', supplier_name AS 'Supplier', boxes.box_id AS 'Box ID', planned_use AS 'Planned Use', volume AS 'Volume', thaw_count AS 'Thaw Count', is_empty AS 'Empty'" +
 					"FROM samples, boxes, suppliers " +
 					"WHERE samples.box_id = boxes.box_id " +
 					"AND boxes.supplier_id = suppliers.supplier_id"

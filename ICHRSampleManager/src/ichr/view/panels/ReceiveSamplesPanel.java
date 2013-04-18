@@ -273,12 +273,7 @@ public class ReceiveSamplesPanel extends JPanel {
 	}
 	
 	public boolean isThawed() {
-		if (btnThawedNo.isSelected()) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return btnThawedYes.isSelected();
 	}
 	
 	public void showFreezerAssignment(String freezerName, int row, int col) {

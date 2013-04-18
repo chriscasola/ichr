@@ -141,4 +141,8 @@ public class NewUserDialog extends JPanel {
 	public JButton getAddUserButton() {
 		return btnAddUser;
 	}
+	
+	public JButton getCancelButton() {
+		return btnCancel;
+	}
 }

@@ -38,6 +38,10 @@ public class RetrieveSampleController {
 	
 	protected boolean isValid = false;
 	
+	public enum SampleStatus {
+		SAMPLE_EMPTY, SAMPLE_CHECKED_OUT, SAMPLE_CHECKED_IN, SAMPLE_VALID, SAMPLE_INVALID
+	}
+	
 	public boolean isValidId(String sampleId) {
 		PreparedStatement s = null;
 		
@@ -137,9 +141,12 @@ public class RetrieveSampleController {
 		return false;
 	}
 	
-	public boolean checkOutSample(String comment) {
+	public SampleStatus checkOutSample(String comment) {
 		if (isAlreadyCheckedOut()) {
-			return false;
+			return SampleStatus.SAMPLE_CHECKED_OUT;
+		}
+		else if (isEmpty) {
+			return SampleStatus.SAMPLE_EMPTY;
 		}
 		
 		PreparedStatement s = null;
@@ -160,7 +167,7 @@ public class RetrieveSampleController {
 				s.setString(1, sampleId);
 				s.executeUpdate();
 				DataStore.getDB().getConnection().commit();
-				return true;
+				return SampleStatus.SAMPLE_VALID;
 			}
 		}
 		catch (ICHRException e) {
@@ -175,7 +182,7 @@ public class RetrieveSampleController {
 			DataStore.getDB().closeStatement(s);
 		}
 		
-		return false;
+		return SampleStatus.SAMPLE_INVALID;
 	}
 	
 	private boolean isAlreadyCheckedOut() {

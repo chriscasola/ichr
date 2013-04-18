@@ -87,7 +87,7 @@ public class LoginPanel extends JPanel {
 	}
 	
 	private void constructComponents() {
-		headerPanel = new HeaderPanel();
+		headerPanel = new HeaderPanel(false);
 		
 		lblUserName = new JLabel("Username: ");
 		txtUserName = new JTextField(DataStore.USER_NAME_LEN);

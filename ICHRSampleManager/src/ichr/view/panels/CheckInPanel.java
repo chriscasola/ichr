@@ -12,6 +12,8 @@ package ichr.view.panels;
 import static ichr.view.main.MainView.*;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -201,6 +203,14 @@ public class CheckInPanel extends JPanel {
 		
 		btnCheckIn = new JButton("Check In");
 		btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				clearFields();
+				txtSampleNum.setText("");
+				txtComments.setText("");
+			}
+		});
 		
 		lblResult = new JLabel("");
 		lblResult.setForeground(Color.blue);
@@ -219,12 +229,7 @@ public class CheckInPanel extends JPanel {
 	}
 	
 	public boolean getSampleEmpty() {
-		if (btnEmptyNo.isSelected()) {
-			return false;
-		}
-		else {
-			return true;
-		}
+		return btnEmptyYes.isSelected();
 	}
 	
 	public void showMessage(String message) {

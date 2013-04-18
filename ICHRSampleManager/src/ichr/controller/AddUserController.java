@@ -62,6 +62,13 @@ public class AddUserController implements ActionListener {
 				}
 			}
 		});
+		dialog.getCancelButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				dialogWrapper.setVisible(false);
+				dialogWrapper.dispose();
+			}
+		});
 		
 		dialog.getUserNameField().requestFocusInWindow();
 		dialogWrapper.pack();

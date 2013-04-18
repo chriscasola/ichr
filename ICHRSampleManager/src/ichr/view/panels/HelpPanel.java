@@ -11,6 +11,8 @@ package ichr.view.panels;
 
 import static ichr.view.main.MainView.*;
 
+import ichr.controller.ChangeHelpController;
+
 import static javax.swing.SpringLayout.*;
 
 import javax.swing.JLabel;
@@ -53,13 +55,13 @@ public class HelpPanel extends JPanel {
 		layout.putConstraint(NORTH, helpListScroll, VERTICAL_SPACING, SOUTH, lblContents);
 		layout.putConstraint(WEST, helpListScroll, VERTICAL_SPACING, WEST, this);
 		layout.putConstraint(EAST, helpListScroll, 200, WEST, helpListScroll);
-		layout.putConstraint(SOUTH, helpListScroll, 400, NORTH, helpListScroll);
+		layout.putConstraint(SOUTH, helpListScroll, -5, SOUTH, this);
 		
 		// layout the detail pane
 		layout.putConstraint(NORTH, txtDetailScroll, 0, NORTH, helpListScroll);
 		layout.putConstraint(WEST, txtDetailScroll, SECTION_SPACING, EAST, helpListScroll);
 		layout.putConstraint(EAST, txtDetailScroll, VERTICAL_SPACING * -1, EAST, this);
-		layout.putConstraint(SOUTH, txtDetailScroll, 0, SOUTH, helpListScroll);
+		layout.putConstraint(SOUTH, txtDetailScroll, -5, SOUTH, this);	
 		
 		add(lblContents);
 		add(helpListScroll);
@@ -73,10 +75,16 @@ public class HelpPanel extends JPanel {
 		Object[] help = {"Check In", "Check Out", "Receive Samples", "Reports", "Search", "Users"};
 		helpList = new JList(help);
 		helpListScroll = new JScrollPane(helpList);
+		helpList.addListSelectionListener(new ChangeHelpController(this));
 		
-		// dummy data
-		String helpDetail = "Help contents will go here...";
-		txtDetail = new JTextArea(helpDetail, 200, 200);
+		txtDetail = new JTextArea(1, 1);
+		txtDetail.setEditable(false);
+		txtDetail.setLineWrap(true);
+		txtDetail.setWrapStyleWord(true);
 		txtDetailScroll = new JScrollPane(txtDetail);
+	}
+	
+	public JTextArea getHelpDetailArea() {
+		return txtDetail;
 	}
 }

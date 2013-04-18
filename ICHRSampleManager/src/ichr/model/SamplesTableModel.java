@@ -78,6 +78,15 @@ public class SamplesTableModel extends AbstractTableModel {
 	 */
 	@Override
 	public Object getValueAt(int row, int col) {
+		Object value = data.get(row)[col];
+		if (value instanceof Boolean) {
+			if (value.equals(true)) {
+				return "Yes";
+			}
+			else {
+				return "No";
+			}
+		}
 		return data.get(row)[col];
 	}
 	

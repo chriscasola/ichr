@@ -57,7 +57,7 @@ public class MainView extends JFrame {
 		SpringLayout layout = new SpringLayout();
 		content.setLayout(layout);
 
-		headerPanel = new HeaderPanel();
+		headerPanel = new HeaderPanel(true);
 		
 		tabButtonPanel = new TabButtonPanel();
 		tabButtonPanel.setBackground(new Color(179,243,109));
@@ -130,5 +130,9 @@ public class MainView extends JFrame {
 		for (JToggleButton b : tabButtonPanel.getButtons()) {
 			b.addActionListener(new TabButtonListener(mainTabPanel, tabButtonPanel));
 		}
+	}
+	
+	public MainTabPanel getMainTabPanel() {
+		return mainTabPanel;
 	}
 }

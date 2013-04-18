@@ -14,6 +14,7 @@ import ichr.controller.ChangePasswordController;
 import ichr.controller.DeleteUserController;
 import ichr.controller.ReceiveBoxController;
 import ichr.controller.RetrieveSampleController;
+import ichr.controller.RetrieveSampleController.SampleStatus;
 import ichr.controller.SearchSamplesController;
 import ichr.view.panels.CheckInPanel;
 import ichr.view.panels.CheckOutPanel;
@@ -72,14 +73,21 @@ public class MainTabPanel extends JPanel {
 		checkOutView.getBtnCheckOut().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (checkOutController.checkOutSample(checkOutView.getCommentField().getText())) {
+				SampleStatus status = checkOutController.checkOutSample(checkOutView.getCommentField().getText());
+				if (status == SampleStatus.SAMPLE_VALID) {
 					checkOutView.clearFields();
 					checkOutView.getSampleNumField().setText("");
 					checkOutView.getCommentField().setText("");
 					checkOutView.showMessage("Sample Checked Out");
 				}
-				else {
+				else if (status == SampleStatus.SAMPLE_CHECKED_OUT) {
 					JOptionPane.showMessageDialog(checkOutView, "The sample is already checked out!", "Sample Already Checked Out", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else if (status == SampleStatus.SAMPLE_EMPTY) {
+					JOptionPane.showMessageDialog(checkOutView, "The sample is empty and cannot be checked out!", "Sample Empty", JOptionPane.INFORMATION_MESSAGE);
+				}
+				else {
+					JOptionPane.showMessageDialog(checkOutView, "Unabe to check out sample!", "Sample Cannot be Checked Out", JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -139,5 +147,9 @@ public class MainTabPanel extends JPanel {
 	
 	public CardLayout getLayout() {
 		return layout;
+	}
+	
+	public CheckOutPanel getCheckOutPanel() {
+		return checkOutView;
 	}
 }
