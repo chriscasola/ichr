@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS ichr.freezer_shelves;
+DROP TABLE IF EXISTS ichr.freezers;
+DROP TABLE IF EXISTS ichr.sample_uses;
+DROP TABLE IF EXISTS ichr.samples;
+DROP TABLE IF EXISTS ichr.boxes;
+DROP TABLE IF EXISTS ichr.sample_types;
+DROP TABLE IF EXISTS ichr.suppliers;
+DROP TABLE IF EXISTS ichr.users;
+DROP TABLE IF EXISTS ichr.contacts;

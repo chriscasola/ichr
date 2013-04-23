@@ -1,0 +1,7 @@
+1. Enter the sample ID you want to check out into "Sample Number" text box.
+- If the sample number entered is valid, a "valid sample" message will appear right next to the "Sample Number" text box, and the system will automatically display the corresponding sample information on the following fields: Date/Time, Thaw Count, Freezer, Position, and Box ID. User can also enter the purpose of checking out this sample in "Purpose" text box. There is no character limit in the text box. 
+- If the sample number entered is invalid, no alert message will appear on the screen nor any fields will automatically be filled out until you enter a valid sample number.
+
+2.0 Click "Check Out" when finishing reviewing all inputs and confirm to check out the sample.
+
+2.1 Click "Cancel" to clear all entries and cancel check out.

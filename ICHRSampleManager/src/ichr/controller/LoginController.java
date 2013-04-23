@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import ichr.ICHRException;
+import ichr.ICHRSampleManager;
 import ichr.database.DataStore;
 import ichr.view.login.LoginView;
 
@@ -43,21 +44,34 @@ public class LoginController implements ActionListener {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		// Get user input
-		String username = view.getLoginPanel().getUserNameField().getText();
-		char[] charPassword = view.getLoginPanel().getPasswordField().getPassword();
-		String password = String.copyValueOf(charPassword);
-		
-		// Check the credentials
 		try {
-			checkPassword(username, password);
+			// Check the credentials
+			checkCredentials();
+			
+			// Show the main application window
+			ICHRSampleManager.showMainWindow();
+			
+			// Close the login window
 			view.dispose();
 		}
 		catch (ICHRException e) {
 			JOptionPane.showMessageDialog(view, "Invalid login information!", "Invalid Login", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	protected void checkCredentials() throws ICHRException {
+		// Get user input
+		String username = view.getLoginPanel().getUserNameField().getText();
+		char[] charPassword = view.getLoginPanel().getPasswordField().getPassword();
+		String password = String.copyValueOf(charPassword);
 		
-		// Clear password in memory
+		// Check the password
+		checkPassword(username, password);
+		
+		// Store username
+		ICHRSampleManager.setUsername(username);
+		
+		// Clear password from memory
 		for (int i = 0; i < charPassword.length; i++) {
 			charPassword[i] = 0;
 		}
@@ -66,23 +80,23 @@ public class LoginController implements ActionListener {
 	protected void checkPassword(String username, String password) throws ICHRException {
 		PreparedStatement s = null;
 		try {
-			s = DataStore.getDB().getConnection().prepareStatement("SELECT password FROM users WHERE username=?");
+			// Query the database for the user's password
+			s = DataStore.getDB().getPreparedStatement("SELECT password FROM users WHERE username=?");
 			s.setString(1, username);
 			final ResultSet rs = s.executeQuery();
+			
+			// Check that the user exists and their password matches
 			if (!rs.next() || !rs.getString(1).equals(password)) {
+				rs.close();
 				throw new ICHRException("Login Failed: Incorrect password");
 			}
-		} catch (SQLException e) {
+			rs.close();
+		}
+		catch (SQLException e) { // Catch database access errors
 			throw new ICHRException("Error occurred trying to login", e);
 		}
-		finally {
-			if (s != null) {
-				try {
-					s.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
+		finally { // Close the statement
+			DataStore.getDB().closeStatement(s);
 		}
 	}
 }

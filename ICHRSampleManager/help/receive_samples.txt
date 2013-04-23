@@ -1,0 +1,17 @@
+1. Enter the box number of the box of samples received into "Box Number" text box.
+2. Enter the census number of the box of samples received into "Census Number" text box.
+3. Select a supplier from "Supplier" drop-down menu where a list of default suppliers is provided. 
+4. Selet a sample type from "Sample Type" drop-down menu where a list of sample types is provided.
+   -if a sample type is not provided in the list and a user want to add a new sample type 
+   a) click "Manage Sample Types" on the right of "Sample Type" menu;
+   b) enter a new sample type into the textbox at the bottom;
+   c) click "Add" when finishing reviewing all inputs and confirm to add a new sample type.
+   -if a sample type is no loger needed and a user want to remove a sample type
+   a) click "Manage Sample Types" on the right of "Sample Type" menu;
+   b) highlight the sample type you want to delete on the "Sample Types" box;
+   c) after reviewing the selection, click "Remove" to confirm deletion.
+5. enter the count of samples into "Sample Count" textbox.
+6. enter the volume of each sample into "Sample Volume" textbox.
+7. Indicate whether the box of samples is thawed during shippment by selecting "Yes" or "No" radio buttons in "Thawed during shippment?".
+8. you can also add additional comment on "Planned use" textbox.
+9. Click "Add" when finishing reveiwing all inputs and confirm to add this box of samples into database.

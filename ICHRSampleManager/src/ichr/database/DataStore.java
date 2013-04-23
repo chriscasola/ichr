@@ -9,10 +9,19 @@
  ******************************************************************************/
 package ichr.database;
 
+import ichr.ICHRException;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Singleton class to provide access to the database
@@ -26,15 +35,24 @@ public class DataStore {
 	private static DataStore instance = null;
 	private Connection connection = null;
 	
+	/*private static final String PROD_DB = "ichr";
+	private static final String PROD_USER = "ichr";
+	private static final String PROD_PWD = "P@ssw0rd";*/
+	
+	// User info for amazon database
 	private static final String PROD_DB = "ichr";
 	private static final String PROD_USER = "ichr";
-	private static final String PROD_PWD = "P@ssw0rd";
+	private static final String PROD_PWD = "mis4720wpi13";
 	
 	private static final String TEST_DB = "ichr_test";
 	private static final String TEST_USER = "ichr";
-	private static final String TEST_PWD = "P@ssw0rd";
+	private static final String TEST_PWD = "mis4720wpi13";
 	
-	private static final String MYSQL_SERVER = "ccasola.dyndns.biz:3306";
+	// mysql on amazon ec2
+	private static final String MYSQL_SERVER = "ec2-54-234-148-102.compute-1.amazonaws.com:3306";
+
+	// local mysql server
+	//private static final String MYSQL_SERVER = "127.0.0.1:3306";
 	
 	/** The length of the username field */
 	public static final int USER_NAME_LEN = 15;
@@ -71,7 +89,7 @@ public class DataStore {
 		System.out.println("Opening database connection.");
 		if (connection == null) {
 			connection = DriverManager.getConnection("jdbc:mysql://" + MYSQL_SERVER + "/" + 
-					PROD_DB + "?" + "user=" + PROD_USER + "&password=" + PROD_PWD);
+					PROD_DB + "?" + "user=" + PROD_USER + "&password=" + PROD_PWD + "&zeroDateTimeBehavior=convertToNull");
 		}
 		connection.setAutoCommit(false);
 	}
@@ -85,6 +103,7 @@ public class DataStore {
 		if (connection != null) {
 			try {
 				connection.close();
+				connection = null;
 			} catch (SQLException e) {
 				System.err.println("Error occurred closing database.");
 				e.printStackTrace();
@@ -99,41 +118,126 @@ public class DataStore {
 			return connection;
 	}
 	
+	public PreparedStatement getPreparedStatement(String query) throws ICHRException {
+		final PreparedStatement s;
+		try {
+			s = connection.prepareStatement(query);
+		} catch (SQLException e) {
+			throw new ICHRException("Could not create statement.", e);
+		}
+		return s;
+	}
+	
+	public void closeStatement(Statement s) {
+		try {
+			s.close();
+		} catch (SQLException e) {
+			System.err.println("Error closing statmenet!");
+			e.printStackTrace();
+		}
+	}
+	
 	/**
-	 * Creates the application's tables if they do not already exist
+	 * Recreate the application's tables (REMOVES ALL DATA)
 	 */
 	public void createTables() {
-		Statement stmt = null;
+		executeSQLFile("./sql/drop.sql");
+		executeSQLFile("./sql/create.sql");
+		executeSQLFile("./sql/insert.sql");
+		generateEmptyFreezerGrids();
+	}
+	
+	private void generateEmptyFreezerGrids() {
+		PreparedStatement s = null;
 		try {
-			stmt = connection.createStatement();
-			stmt.addBatch("CREATE TABLE IF NOT EXISTS users (" +
-					"username VARCHAR(" + USER_NAME_LEN + ")," +
-					"password VARCHAR(" + PASSWORD_LEN + ")," +
-					"PRIMARY KEY (username)" +
-					")");
-			stmt.addBatch("INSERT INTO users VALUES ('admin', 'password')");
-			stmt.executeBatch();
-			connection.commit();
-		}
-		catch (SQLException e) {
-			try {
-				System.err.println("Rolling back transaction: " + e.getMessage());
-				connection.rollback();
-			} catch (SQLException e1) {
-				System.err.println("Error occurred rolling back transaction.");
-				e1.printStackTrace();
+			s = getPreparedStatement(
+					"INSERT INTO freezer_shelves VALUES " +
+					"(?, ?, ?, NULL);");
+			for (int i = 1; i <= 5; i++) { // for each freezer
+				for (int j = 1; j <= 9; j++) { // for each column
+					for (int k = 1; k <= 9; k++) { // for each row
+						s.setInt(1, i);
+						s.setInt(2, k);
+						s.setInt(3, j);
+						s.executeUpdate();
+					}
+				}
 			}
+			getConnection().commit();
+		}
+		catch (ICHRException e) {
+			System.err.println("Error initializing freezer shelves!");
+			e.printStackTrace();
+		} 
+		catch (SQLException e) {
+			System.err.println("Error initializing freezer shelves!");
+			e.printStackTrace();
 		}
 		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				} catch (SQLException e) {
-					System.err.println("Could not close statement!");
-					e.printStackTrace();
+			closeStatement(s);
+		}
+	}
+	
+	public void executeSQLFile(String filePath) {
+		Statement s = null;
+		try {
+			List<String> statements = readSQLFile(filePath);
+			s = connection.createStatement();
+			for (String statement : statements) {
+				s.addBatch(statement);
+			}
+			final int[] results = s.executeBatch();
+			for (int i = 0; i < results.length; i++) {
+				if (results[i] == Statement.EXECUTE_FAILED) {
+					throw new ICHRException("error in sql file");
+				}
+			}
+			connection.commit();
+		}
+		catch (ICHRException e) {
+			System.err.println("Unable to execute SQL file: " + filePath);
+		}
+		catch (SQLException e) {
+			System.err.println("Database error occurred while trying to execute SQL file: " + filePath + "\n\t" + e.getMessage());
+		}
+		finally {
+			if (s != null) {
+				closeStatement(s);
+			}
+		}
+	}
+	
+	private List<String> readSQLFile(String filePath) throws ICHRException {
+		BufferedReader sqlFile = null;
+		List<String> statements = new ArrayList<String>();
+		String currStatement= "";
+		
+		try {
+			sqlFile = new BufferedReader(new FileReader(filePath));
+			int c;
+			while ((c = sqlFile.read()) != -1) {
+				if (c == (int)';') {
+					statements.add(currStatement);
+					currStatement = "";
+				}
+				else {
+					currStatement += (char)c;
 				}
 			}
 		}
+		catch (FileNotFoundException e) {
+			throw new ICHRException("Could not open SQL file", e);
+		}
+		catch (IOException e) {
+			throw new ICHRException("Error reading SQL file", e);
+		}
+		finally {
+			if (sqlFile != null) {
+				try {sqlFile.close();} catch (IOException e) {throw new ICHRException("Could not close SQL file", e);}
+			}
+		}
+		
+		return statements;
 	}
 	
 	/**
@@ -145,7 +249,7 @@ public class DataStore {
 		System.out.println("Opening database connection.");
 		if (connection == null) {
 			connection = DriverManager.getConnection("jdbc:mysql://" + MYSQL_SERVER + "/" + 
-					TEST_DB + "?" + "user=" + TEST_USER + "&password=" + TEST_PWD);
+					TEST_DB + "?" + "user=" + TEST_USER + "&password=" + TEST_PWD + "&zeroDateTimeBehavior=convertToNull");
 		}
 		connection.setAutoCommit(false);
 	}

@@ -1,0 +1,29 @@
+//Add a New User
+1. Click "New User" button to create a new user, and a pop-up window will appear.
+- In the new window, 
+   a) enter your personalized username in "Username" textbox.
+   b) enter your personalized password in "Password" textbox. For security, the inputs are shown as dots.
+   c) enter your real first name in "First Name" textbox.
+   d) enter your real last name in "Last Name" textbox.
+   e) Click "Add User" when finishing reveiwing all inputs and confirm to create a new user.
+   e') Click "Cancel" to cancel the process of creating a new user.
+
+
+
+//Change Password
+1. Highlight a user that you wish to change the password to.
+2. Click "Change password" button to start the process of changeing selected user's password. A pop-up window will appear.
+- In the new window
+   a) enter your old password in "Old Password" textbox.
+   b) enter your new password in "New Password" textbox.
+   c)  Click "Change" when finishing reveiwing all inputs and confirm to change the password to the selected user.
+   c') Click "Cancel" to cancel the process of changing password.
+
+
+
+//Delete User
+1. Highlight a user that you wish to delete.
+2. Click "Delete User" button to start the process of deleting a user. A pop-up window will apear.
+- In the new window
+   a) Click "Yes" if you confirm to delete the selected user.
+   a') Click "No" to cancel the this process.

@@ -1,0 +1,3 @@
+1. Highlight the type of reports you want to generate in the selection box.
+
+2. Click "Export Selected Report" when finishing reviewing selection and confirm to export the selected report.

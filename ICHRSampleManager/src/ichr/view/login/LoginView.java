@@ -29,9 +29,6 @@ import javax.swing.JFrame;
 @SuppressWarnings("serial")
 public class LoginView extends JFrame {
 	
-	protected static final int WINDOW_WIDTH = 500;
-	protected static final int WINDOW_HEIGHT = 400;
-	
 	protected final LoginPanel loginPanel;
 	
 	public LoginView(String applicationName) {
@@ -43,6 +40,9 @@ public class LoginView extends JFrame {
 		
 		// Add controller to login button
 		loginPanel.getLoginButton().addActionListener(new LoginController(this));
+		
+		// Make the login button the default button for the enter key
+		this.getRootPane().setDefaultButton(loginPanel.getLoginButton());
 		
 		// Clean up when the close button is clicked.
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -57,12 +57,15 @@ public class LoginView extends JFrame {
 				System.exit(0);
 			}
 		});
+		pack();
 		
 		// Set the window size and position
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		int xPos = (dim.width - WINDOW_WIDTH) / 2;
-		int yPos = (int)((dim.height - WINDOW_HEIGHT) / 2 * .75);
-		setBounds(xPos, yPos, WINDOW_WIDTH, WINDOW_HEIGHT);
+		int width = (int) getPreferredSize().getWidth();
+		int height = (int) getPreferredSize().getHeight();
+		int xPos = (dim.width - width) / 2;
+		int yPos = (int)((dim.height - height) / 2 * .75);
+		setBounds(xPos, yPos, width, height);
 	}
 	
 	/**
