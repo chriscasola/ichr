@@ -55,6 +55,7 @@ public class ICHRSampleManager {
 		}
 		catch (SQLException e) { // exit if unable to open database connection
 			System.err.println("Could not open database connection!");
+			e.printStackTrace();
 			System.exit(1);
 		}
 

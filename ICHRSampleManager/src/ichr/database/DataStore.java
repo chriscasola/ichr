@@ -39,6 +39,7 @@ public class DataStore {
 	private static final String PROD_USER = "ichr";
 	private static final String PROD_PWD = "P@ssw0rd";*/
 	
+	// User info for amazon database
 	private static final String PROD_DB = "ichr";
 	private static final String PROD_USER = "ichr";
 	private static final String PROD_PWD = "mis4720wpi13";
@@ -47,7 +48,11 @@ public class DataStore {
 	private static final String TEST_USER = "ichr";
 	private static final String TEST_PWD = "mis4720wpi13";
 	
+	// mysql on amazon ec2
 	private static final String MYSQL_SERVER = "ec2-54-234-148-102.compute-1.amazonaws.com:3306";
+
+	// local mysql server
+	//private static final String MYSQL_SERVER = "127.0.0.1:3306";
 	
 	/** The length of the username field */
 	public static final int USER_NAME_LEN = 15;
